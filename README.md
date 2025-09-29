@@ -60,7 +60,7 @@ Welcome to the Online Auction Management System! This project allows users to cr
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under 
 
 ## Contact
 
