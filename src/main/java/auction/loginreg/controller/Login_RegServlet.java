@@ -10,17 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class Login_RegServelet
  */
-@WebServlet("/Login_RegServelet")
-public class Login_RegServelet extends HttpServlet {
+@WebServlet("/")
+public class Login_RegServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public Login_RegServelet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+	
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
