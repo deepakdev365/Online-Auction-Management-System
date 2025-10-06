@@ -7,6 +7,13 @@
 <title>NextAuction</title>
 </head>
 <body>
+<form action="Login_RegServlet">
+<h1 >Welcome To NextAuction</h1>
+
+
+
+</form>
+
 
 </body>
 </html>
