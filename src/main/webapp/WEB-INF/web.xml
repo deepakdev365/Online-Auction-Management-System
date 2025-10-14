@@ -4,4 +4,24 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  <servlet>
+  	<servlet-name>LoginServlet</servlet-name>
+  	<display-name>LoginServlet</display-name>
+  	<description></description>
+  	<servlet-class>nextauction.login.controller.LoginServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>SgnupServlet</servlet-name>
+  	<display-name>SgnupServlet</display-name>
+  	<description></description>
+  	<servlet-class>nextauction.signup.controller.SgnupServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>LoginServlet</servlet-name>
+  	<url-pattern>/LoginServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>SgnupServlet</servlet-name>
+  	<url-pattern>/Sgnup</url-pattern>
+  </servlet-mapping>
 </web-app>
