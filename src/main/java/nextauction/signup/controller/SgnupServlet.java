@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class SgnupServlet
  */
-@WebServlet("/Sgnup")
+@WebServlet("/Signup")
 public class SgnupServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
