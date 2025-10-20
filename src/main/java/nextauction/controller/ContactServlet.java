@@ -1,4 +1,4 @@
-package com.auction.servlet;
+package nextauction.controller;
 
 import java.io.IOException;
 import javax.servlet.*;

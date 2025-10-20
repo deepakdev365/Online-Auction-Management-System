@@ -1,0 +1,42 @@
+/* Admin Login Page */
+.admin-login-body {
+    background: linear-gradient(to right, #0073e6, #00b3b3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.admin-login-container {
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    width: 320px;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+}
+
+.admin-login-container h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.admin-login-container input {
+width: 100%;
+padding: 10px;
+margin: 8px 0;
+border: 1px solid #ccc;
+border-radius: 5px;
+}
+
+.admin-login-container input[type="submit"] {
+background: #0073e6;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.admin-login-container input[type="submit"]:hover {
+    background: #005bb5;
+}
