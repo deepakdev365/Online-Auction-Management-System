@@ -30,19 +30,19 @@
 
       <div class="">
         <a href="login.jsp" class="na-btn na-btn-primary">Login</a>
-        <a href="register.jsp" class="na-btn na-btn-outline">Register</a>
+        <a href="Signup.jsp" class="na-btn na-btn-outline">Register</a>
       </div>
     </div>
   </nav>
 
   <!-- Body -->
-  <main class="na-main container-fluid">
-    <div class="row g-3">
+  <main class="">
+    <div class="">
       <!-- Sidebar -->
-      <aside class="col-12 col-md-3 col-lg-2">
-        <section class="na-card">
-          <h5 class="na-section-title">Categories</h5>
-          <ul class="na-list">
+      <aside class="">
+        <section class="">
+          <h5 class="">Categories</h5>
+          <ul class="">
             <li><a href="#">Electronics</a></li>
             <li><a href="#">Vehicles</a></li>
             <li><a href="#">Home & Garden</a></li>
@@ -66,7 +66,6 @@
               <h6 class="na-item-title">Rare Swiss Chronograph</h6>
               <div class="na-item-meta">
                 <span class="na-price">₹15,200</span>
-                <span class="na-timer">02:35:10</span>
               </div>
               <a href="item?id=1" class="na-btn na-btn-primary w-100">Bid Now</a>
             </article>
@@ -76,7 +75,6 @@
               <h6 class="na-item-title">Classic Car</h6>
               <div class="na-item-meta">
                 <span class="na-price">₹45,000</span>
-                <span class="na-timer">1d 10:45</span>
               </div>
               <a href="item?id=2" class="na-btn na-btn-primary w-100">Bid Now</a>
             </article>
