@@ -1,7 +1,12 @@
-<!DOCTYPE web-app PUBLIC
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd" >
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee" version="4.0">
+   <servlet>
+    <servlet-name>SellerServlet</servlet-name>
+    <servlet-class>com.onlineauction.servlet.SellerServlet</servlet-class>
+</servlet>
 
-<web-app>
-  <display-name>Archetype Created Web Application</display-name>
+<servlet-mapping>
+    <servlet-name>SellerServlet</servlet-name>
+    <url-pattern>/SellerServlet</url-pattern>
+</servlet-mapping>
+
 </web-app>
