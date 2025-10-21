@@ -10,17 +10,19 @@ import nextauction.model.Admin;
 @WebServlet("/AdminLoginServlet")
 public class AdminLoginServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    
+    
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+        String email= request.getParameter("email");
+        String password= request.getParameter("password");
 
-        AdminDao adminDAO = new AdminDao();
-        Admin admin = adminDAO.validateAdmin(email, password);
+        AdminDao adminDao=new AdminDao();
+        Admin admin=adminDao.validateAdmin(email, password);
 
-        if (admin != null) {
+        if (admin!=null) {
             HttpSession session = request.getSession();
             session.setAttribute("adminEmail", admin.getEmail());
             session.setAttribute("adminName", admin.getFullname());

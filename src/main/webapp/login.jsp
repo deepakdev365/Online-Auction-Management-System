@@ -8,9 +8,12 @@
 </head>
 <body>
 <div>
-<form action="LoginServlet">
+<h2>Bidder Login</h2>
 
-<input>
+<form action="LoginServlet" method="post">
+<input type="email" name="email" placeholder="Bidder Email" required><br>
+<input type="password" name="password" placeholder="Password" required><br>
+<input type="submit" value="Login">
 </form>
 
 </div>
