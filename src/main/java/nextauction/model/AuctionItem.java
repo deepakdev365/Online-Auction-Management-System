@@ -1,102 +1,86 @@
 package nextauction.model;
-
 import java.util.Date;
-import java.util.List;
-
 public class AuctionItem {
     private int id;
-    private String name;
+    private int sellerId;
+    private String title;
     private String description;
-    private double startingPrice;
-    private String status;
-    private double currentBid;
-    private Date endDate;       // Add this field
-    private Date bidEndTime;    // If you have separate bidEndTime, keep both if needed
+    private double startPrice;
+    private Double currentBid;
+    private Integer currentBidderId;
     private String imagePath;
-    private List<String> bids;
-
-    // existing getters and setters...
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
-    public Date getBidEndTime() {
-        return bidEndTime;
-    }
-
-    public void setBidEndTime(Date bidEndTime) {
-        this.bidEndTime = bidEndTime;
-    }
-
+    private Date startTime;
+    private Date endTime;
+    private String status;
+    // getters/setters omitted for brevity (implement all)
+    // ...
 	public int getId() {
 		return id;
 	}
-
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public String getName() {
-		return name;
+	public int getSellerId() {
+		return sellerId;
 	}
-
-	public void setName(String name) {
-		this.name = name;
+	public void setSellerId(int sellerId) {
+		this.sellerId = sellerId;
 	}
-
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
 	public String getDescription() {
 		return description;
 	}
-
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	public double getStartingPrice() {
-		return startingPrice;
+	public double getStartPrice() {
+		return startPrice;
 	}
-
-	public void setStartingPrice(double startingPrice) {
-		this.startingPrice = startingPrice;
+	public void setStartPrice(double startPrice) {
+		this.startPrice = startPrice;
 	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public double getCurrentBid() {
+	public Double getCurrentBid() {
 		return currentBid;
 	}
-
-	public void setCurrentBid(double currentBid) {
+	public void setCurrentBid(Double currentBid) {
 		this.currentBid = currentBid;
 	}
-
+	public Integer getCurrentBidderId() {
+		return currentBidderId;
+	}
+	public void setCurrentBidderId(Integer currentBidderId) {
+		this.currentBidderId = currentBidderId;
+	}
 	public String getImagePath() {
 		return imagePath;
 	}
-
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
 	}
-
-	public List<String> getBids() {
-		return bids;
+	public Date getStartTime() {
+		return startTime;
 	}
-
-	public void setBids(List<String> bids) {
-		this.bids = bids;
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
 	}
-
-    // other getters and setters...
+	public Date getEndTime() {
+		return endTime;
+	}
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+    
+    
     
 }
