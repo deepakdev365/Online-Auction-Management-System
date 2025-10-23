@@ -1,166 +1,243 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" %>
-<%@ page import="java.util.List" %>
-<%@ page import="nextauction.model.AuctionItem" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Seller Dashboard</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <meta charset="UTF-8">
+    <title>Seller Dashboard | Online Auction</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            margin: 0;
-            font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
-            background: linear-gradient(135deg, #e9eafc 0%, #c4e0e5 100%);
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: 'Segoe UI', sans-serif;
         }
-        .sidebar {
-            height: 100vh;
-            width: 220px;
-            position: fixed;
-            background: #1a237e;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            box-shadow: 2px 0 12px #9fa8da90;
+        .nav-link.active {
+            background-color: #21262d !important;
+            color: #58a6ff !important;
+            border-radius: 8px;
         }
-        .profile {
-            margin: 40px 0 24px 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        .section {
+            display: none;
         }
-        .profile-icon {
-            font-size: 70px;
-            color: #c5cae9;
-            background: #fff;
-            border-radius: 50%;
-            padding: 16px;
-            border: 3px solid #7986cb;
+        .visible {
+            display: block;
         }
-        .profile-name {
-            margin-top: 12px;
-            font-size: 20px;
-            font-weight: 700;
-            color: #fff;
+        .card {
+            background-color: #161b22;
+            border: 1px solid #30363d;
         }
-        .sidebar-menu {
-            margin-top: 36px;
-            width: 100%;
+        .btn-custom {
+            background-color: #238636;
+            color: white;
         }
-        .sidebar-menu a {
-            display: flex;
-            align-items: center;
-            font-size: 17px;
-            padding: 14px 20px;
-            color: #d1c4e9;
-            text-decoration: none;
-            transition: background 0.2s, color 0.2s;
+        .btn-custom:hover {
+            background-color: #2ea043;
         }
-        .sidebar-menu a .material-icons {
-            margin-right: 10px;
-            font-size: 24px;
-        }
-        .sidebar-menu a:hover, .sidebar-menu a.active {
-            background: #3949ab;
-            color: #fff;
-        }
-        .main {
-            margin-left: 240px;
-            padding: 40px 50px 30px 50px;
-        }
-        .dashboard-title {
-            font-size: 32px;
-            letter-spacing: 1px;
-            color: #1a237e;
-            margin-bottom: 26px;
-        }
-        .auction-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 32px;
-        }
-        .auction-card {
-            background: #fff;
-            border-radius: 14px;
-            box-shadow: 0 2px 10px #c5cae963;
-            padding: 28px 26px 18px 26px;
-            width: 310px;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .auction-card:hover {
-            transform: translateY(-3px) scale(1.025);
-            box-shadow: 0 8px 36px #5c6bc08c;
-        }
-        .item-title {
-            font-size: 22px;
-            color: #283593;
-            font-weight: bold;
-            margin-bottom: 6px;
-        }
-        .item-desc {
-            color: #616161;
-            font-size: 15px;
-            margin-bottom: 12px;
-        }
-        .item-info {
-            color: #37474f;
-            font-size: 16px;
-            margin-bottom: 5px;
-        }
-        .item-status {
-            display: inline-block;
-            font-size: 13px;
-            padding: 4px 10px;
-            border-radius: 10px;
-            background: #fbc02d;
-            color: #222;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-        .item-status.closed { background: #cfd8dc; color: #607d8b; }
-        .item-status.active { background: #81c784; color: #256029; }
-        .no-items {
-            color: #9e9e9e;
-            font-size: 20px;
-            margin-top: 50px;
+        .card-img-top {
+            max-height: 180px;
+            object-fit: cover;
+            border-radius: 6px;
         }
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <div class="profile">
-            <span class="material-icons profile-icon">person</span>
-            <span class="profile-name">Seller</span>
-        </div>
-        <div class="sidebar-menu">
-            <a href="profileDetails.jsp"><span class="material-icons">account_circle</span> Profile</a>
-            <a href="addItem.jsp"><span class="material-icons">add_box</span> Add Item</a>
-            <a href="bids.jsp"><span class="material-icons">gavel</span> Bids</a>
-        </div>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+    <a class="navbar-brand" href="#">💼 Online Auction</a>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a href="#" class="nav-link active" onclick="showSection('profileSection', this)">Profile</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" onclick="showSection('addItemSection', this)">Add Item</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" onclick="showSection('liveSection', this)">Live Auctions</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" onclick="showSection('winnerSection', this)">Winners</a></li>
+        </ul>
     </div>
-    <div class="main">
-        <div class="dashboard-title">Your Auction Items</div>
-        <%
-            List<AuctionItem> sellerItems = (List<AuctionItem>) request.getAttribute("sellerItems");
-            if (sellerItems != null && !sellerItems.isEmpty()) {
-        %>
-        <div class="auction-grid">
-        <% for (AuctionItem item : sellerItems) { %>
-            <div class="auction-card">
-                <div class="item-title"><%= item.getName() %></div>
-                <div class="item-desc"><%= item.getDescription() %></div>
-                <div class="item-info">Start: ₹<%= item.getStartingPrice() %></div>
-                <div class="item-info">Current Bid: ₹<%= item.getCurrentBid() %></div>
-                <div class="item-info">Ends: <%= item.getEndDate() %></div>
-                <div class="item-status <%= item.getStatus().toLowerCase() %>">
-                    <%= item.getStatus() %>
+</nav>
+
+<div class="container py-4">
+
+    <!-- Profile Section -->
+    <div id="profileSection" class="section visible">
+        <h3 class="mb-3 text-info">👤 My Profile</h3>
+        <div id="profileDetails" class="card p-3"></div>
+    </div>
+
+    <!-- Add Item Section -->
+    <div id="addItemSection" class="section">
+        <h3 class="mb-3 text-warning">🛒 Add New Auction Item</h3>
+        <form id="addItemForm" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <label class="form-label">Title</label>
+                    <input type="text" class="form-control" name="title" required>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label class="form-label">Starting Price</label>
+                    <input type="number" class="form-control" name="start_price" required step="0.01">
+                </div>
+                <div class="col-12 mb-2">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" name="description" rows="2"></textarea>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label class="form-label">Start Time (optional)</label>
+                    <input type="datetime-local" class="form-control" name="start_time">
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label class="form-label">End Time</label>
+                    <input type="datetime-local" class="form-control" name="end_time" required>
+                </div>
+                <div class="col-12 mb-2">
+                    <label class="form-label">Upload Image</label>
+                    <input type="file" class="form-control" name="image" accept="image/*">
+                </div>
+                <div class="col-12 text-end mt-3">
+                    <button type="submit" class="btn btn-custom">Add Item</button>
                 </div>
             </div>
-        <% } %>
-        </div>
-        <% } else { %>
-        <div class="no-items">You have not added any items yet.</div>
-        <% } %>
+        </form>
+        <div id="addItemMsg" class="mt-3"></div>
     </div>
+
+    <!-- Live Auctions Section -->
+    <div id="liveSection" class="section">
+        <h3 class="mb-3 text-success">🔥 Live Auctions</h3>
+        <div id="liveAuctions" class="row"></div>
+    </div>
+
+    <!-- Winners Section -->
+    <div id="winnerSection" class="section">
+        <h3 class="mb-3 text-primary">🏆 Winners</h3>
+        <div id="winnersList" class="row"></div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // ===== NAVIGATION =====
+    function showSection(id, el) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
+        document.getElementById(id).classList.add('visible');
+        document.querySelectorAll('.nav-link').forEach(a => a.classList.remove('active'));
+        el.classList.add('active');
+    }
+
+    // ===== LOAD PROFILE =====
+    async function loadProfile() {
+        const res = await fetch('profile');
+        if (res.ok) {
+            const data = await res.json();
+            document.getElementById('profileDetails').innerHTML = data.error 
+                ? `<p class='text-danger'>${data.error}</p>` 
+                : `<p><b>Name:</b> ${data.name}</p>
+                   <p><b>Email:</b> ${data.email}</p>
+                   <p><b>Role:</b> ${data.role}</p>`;
+        }
+    }
+
+    // ===== ADD ITEM =====
+    document.getElementById('addItemForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const res = await fetch('addItem', { method: 'POST', body: formData });
+        const msgDiv = document.getElementById('addItemMsg');
+        if (res.ok) {
+            const data = await res.json();
+            msgDiv.innerHTML = data.success 
+                ? `<p class='text-success'>✅ Item added successfully (ID: ${data.id})</p>` 
+                : `<p class='text-danger'>❌ ${data.error}</p>`;
+            if (data.success) e.target.reset();
+        } else {
+            msgDiv.innerHTML = `<p class='text-danger'>⚠️ Failed to add item</p>`;
+        }
+    });
+
+    // ===== LOAD LIVE AUCTIONS =====
+    async function loadLiveAuctions() {
+        const res = await fetch('live');
+        const container = document.getElementById('liveAuctions');
+        if (!res.ok) { container.innerHTML = `<p class='text-danger'>Error loading auctions</p>`; return; }
+
+        const items = await res.json();
+        container.innerHTML = '';
+        if (items.length === 0) { container.innerHTML = `<p class='text-secondary'>No live auctions available.</p>`; return; }
+
+        items.forEach(it => {
+            container.innerHTML += `
+                <div class="col-md-4 mb-3">
+                    <div class="card p-3">
+                        ${it.image_path ? `<img src="${it.image_path}" class="card-img-top mb-2">` : ''}
+                        <h5>${it.title}</h5>
+                        <p>${it.description}</p>
+                        <p><b>Seller:</b> ${it.seller_name}</p>
+                        <p><b>Start Price:</b> ₹${it.start_price}</p>
+                        <p><b>Current Bid:</b> ${it.current_bid ? "₹" + it.current_bid : "No bids yet"}</p>
+                        <form onsubmit="placeBid(event, ${it.id})">
+                            <div class="input-group mb-2">
+                                <input type="number" step="0.01" class="form-control" name="bid_amount" placeholder="Your bid" required>
+                                <button class="btn btn-custom">Bid</button>
+                            </div>
+                        </form>
+                        <small class="text-muted">Ends: ${it.end_time}</small>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    // ===== PLACE BID =====
+    async function placeBid(e, itemId) {
+        e.preventDefault();
+        const form = e.target;
+        const bid = form.bid_amount.value;
+        const formData = new URLSearchParams();
+        formData.append("item_id", itemId);
+        formData.append("bid_amount", bid);
+
+        const res = await fetch('placeBid', { method: 'POST', body: formData });
+        const data = await res.json();
+        alert(data.success ? "✅ Bid placed successfully!" : "⚠️ " + (data.error || "Failed to bid"));
+        loadLiveAuctions();
+    }
+
+    // ===== LOAD WINNERS =====
+    async function loadWinners() {
+        const res = await fetch('winners');
+        const container = document.getElementById('winnersList');
+        if (!res.ok) { container.innerHTML = `<p class='text-danger'>Error loading winners</p>`; return; }
+
+        const list = await res.json();
+        container.innerHTML = '';
+        if (list.length === 0) { container.innerHTML = `<p class='text-secondary'>No auctions ended yet.</p>`; return; }
+
+        list.forEach(w => {
+            container.innerHTML += `
+                <div class="col-md-4 mb-3">
+                    <div class="card p-3">
+                        ${w.image_path ? `<img src="${w.image_path}" class="card-img-top mb-2">` : ''}
+                        <h5>${w.title}</h5>
+                        <p><b>Winner:</b> ${w.winner_name || 'No winner'}</p>
+                        <p><b>Final Bid:</b> ₹${w.current_bid || 0}</p>
+                        <p><b>Seller:</b> ${w.seller_name}</p>
+                        <small class="text-muted">Ended: ${w.end_time}</small>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    // ===== AUTO REFRESH =====
+    setInterval(loadLiveAuctions, 5000);
+    setInterval(loadWinners, 8000);
+
+    // ===== INITIAL LOAD =====
+    loadProfile();
+    loadLiveAuctions();
+    loadWinners();
+</script>
+
 </body>
 </html>

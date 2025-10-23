@@ -1,72 +1,133 @@
 package nextauction.servlet;
 
-import nextauction.model.AuctionItem;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.sql.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
-@WebServlet("/AddItemServlet")
-@MultipartConfig
+import nextauction.util.DBUtil;
+
+import java.io.*;
+import java.nio.file.*;
+import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+@WebServlet("/addItem")
+@MultipartConfig(
+    fileSizeThreshold = 1024 * 1024, // 1MB
+    maxFileSize = 5 * 1024 * 1024,   // 5MB
+    maxRequestSize = 10 * 1024 * 1024
+)
 public class AddItemServlet extends HttpServlet {
 
-    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/online_auction";
-    private static final String JDBC_USER = "root";
-    private static final String JDBC_PASSWORD = "RJP279";
-    private static final String UPLOAD_DIR = "uploads";
+    private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+    private static final String IMAGE_UPLOAD_DIR = "uploads"; // relative to WebContent
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String appPath = request.getServletContext().getRealPath("");
-        String uploadPath = appPath + File.separator + UPLOAD_DIR;
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("application/json;charset=UTF-8");
+        PrintWriter out = resp.getWriter();
 
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) uploadDir.mkdirs();
+        HttpSession session = req.getSession(false);
+        if (session == null || session.getAttribute("userId") == null) {
+            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            out.print("{\"error\":\"not_logged_in\"}");
+            return;
+        }
+        int sellerId = (Integer) session.getAttribute("userId");
 
-        Part filePart = request.getPart("image");
-        String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+        // Get form parameters
+        String title = req.getParameter("title");
+        String description = req.getParameter("description");
+        String startPriceStr = req.getParameter("start_price");
+        String startTimeStr = req.getParameter("start_time");
+        String endTimeStr = req.getParameter("end_time");
 
-        filePart.write(uploadPath + File.separator + fileName);
-
-        String name = request.getParameter("name");
-        String description = request.getParameter("description");
-        double startingPrice = Double.parseDouble(request.getParameter("startingPrice"));
-        Date endDate = null;
-        try {
-            endDate = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("endDate"));
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (title == null || startPriceStr == null || endTimeStr == null) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            out.print("{\"error\":\"missing_params\"}");
+            return;
         }
 
-        String imagePath = UPLOAD_DIR + "/" + fileName;
-
-        String sql = "INSERT INTO AuctionItem(name, description, startingPrice, status, currentBid, endDate, imagePath) VALUES(?, ?, ?, ?, ?, ?, ?)";
-
+        double startPrice;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            try (Connection conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
-                 PreparedStatement ps = conn.prepareStatement(sql)) {
-                ps.setString(1, name);
-                ps.setString(2, description);
-                ps.setDouble(3, startingPrice);
-                ps.setString(4, "Active");
-                ps.setDouble(5, startingPrice);
-                if (endDate != null) ps.setDate(6, new java.sql.Date(endDate.getTime()));
-                else ps.setDate(6, null);
-                ps.setString(7, imagePath);
+            startPrice = Double.parseDouble(startPriceStr);
+        } catch (NumberFormatException ex) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            out.print("{\"error\":\"invalid_start_price\"}");
+            return;
+        }
 
-                ps.executeUpdate();
+        Timestamp startTs = null;
+        Timestamp endTs = null;
+        try {
+            if (startTimeStr != null && !startTimeStr.isEmpty())
+                startTs = Timestamp.valueOf(LocalDateTime.parse(startTimeStr, DTF));
+            endTs = Timestamp.valueOf(LocalDateTime.parse(endTimeStr, DTF));
+        } catch (Exception ex) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            out.print("{\"error\":\"invalid_datetime_format\"}");
+            return;
+        }
+
+        // Handle image upload
+        String imagePath = null;
+        Part filePart = req.getPart("image");
+        if (filePart != null && filePart.getSize() > 0) {
+            String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+            ServletContext context = getServletContext();
+            String uploadDir = context.getRealPath("/" + IMAGE_UPLOAD_DIR);
+            File uploadFolder = new File(uploadDir);
+            if (!uploadFolder.exists()) uploadFolder.mkdirs();
+
+            String newFileName = System.currentTimeMillis() + "_" + fileName;
+            File file = new File(uploadFolder, newFileName);
+            try (InputStream input = filePart.getInputStream()) {
+                Files.copy(input, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
             }
-        } catch (Exception e) {
-            throw new ServletException(e);
+            imagePath = IMAGE_UPLOAD_DIR + "/" + newFileName; // relative path for browser
         }
 
-        response.sendRedirect("SellerDashboard");
+        // Determine status
+        String status = "active";
+        if (startTs != null && startTs.after(new Timestamp(System.currentTimeMillis()))) {
+            status = "pending";
+        }
+
+        // Insert into DB
+        try (Connection con = DBUtil.getConnection()) {
+            PreparedStatement ps = con.prepareStatement(
+                    "INSERT INTO auction_items (seller_id, title, description, start_price, current_bid, current_bidder_id, image_path, start_time, end_time, status) " +
+                            "VALUES (?,?,?,?,?,?,?,?,?,?)",
+                    Statement.RETURN_GENERATED_KEYS
+            );
+            ps.setInt(1, sellerId);
+            ps.setString(2, title);
+            ps.setString(3, description);
+            ps.setDouble(4, startPrice);
+            ps.setObject(5, null); // current_bid
+            ps.setObject(6, null); // current_bidder_id
+            ps.setString(7, imagePath); // image_path
+            ps.setTimestamp(8, startTs); // start_time
+            ps.setTimestamp(9, endTs);   // end_time
+            ps.setString(10, status);    // status
+
+            int updated = ps.executeUpdate();
+            if (updated > 0) {
+                ResultSet keys = ps.getGeneratedKeys();
+                int id = 0;
+                if (keys.next()) id = keys.getInt(1);
+                out.print("{\"success\":true, \"id\":" + id + ", \"image\":\"" + (imagePath != null ? imagePath : "") + "\"}");
+            } else {
+                resp.setStatus(500);
+                out.print("{\"error\":\"insert_failed\"}");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            resp.setStatus(500);
+            out.print("{\"error\":\"server_error\"}");
+        }
     }
 }
