@@ -13,7 +13,7 @@ public class BidderDao {
         List<Bidder> list = new ArrayList<>();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/auction","root", "Buster365@");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/online_auction","root", "RJP279");
             PreparedStatement ps = con.prepareStatement("select * from bidder");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {

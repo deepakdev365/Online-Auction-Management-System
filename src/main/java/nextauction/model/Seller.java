@@ -1,6 +1,7 @@
 package nextauction.model;
 
 public class Seller {
+	
     private String name;
     private String email;
     private String contact;
@@ -17,4 +18,5 @@ public class Seller {
 
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
+	
 }

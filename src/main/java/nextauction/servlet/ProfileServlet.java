@@ -1,42 +1,29 @@
 package nextauction.servlet;
 
-import nextauction.util.DBUtil;
+import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.*;
+import org.json.JSONObject;
 
 @WebServlet("/profile")
 public class ProfileServlet extends HttpServlet {
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("application/json;charset=UTF-8");
-        PrintWriter out = resp.getWriter();
+    private static final long serialVersionUID = 1L;
 
-        HttpSession session = req.getSession(false);
-        if(session == null || session.getAttribute("userId") == null){
-            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            out.print("{\"error\":\"not_logged_in\"}");
-            return;
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("application/json");
+        JSONObject json = new JSONObject();
+
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("email") == null) {
+            json.put("error", "User not logged in.");
+        } else {
+            json.put("name", session.getAttribute("name"));
+            json.put("email", session.getAttribute("email"));
+            json.put("role", session.getAttribute("role"));
         }
 
-        int userId = (Integer) session.getAttribute("userId");
-
-        try(Connection con = DBUtil.getConnection()){
-            PreparedStatement ps = con.prepareStatement("SELECT name,email,role FROM users WHERE id=?");
-            ps.setInt(1,userId);
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()){
-                out.print("{\"name\":\""+rs.getString("name")+"\",\"email\":\""+rs.getString("email")+"\",\"role\":\""+rs.getString("role")+"\"}");
-            } else {
-                out.print("{\"error\":\"user_not_found\"}");
-            }
-        } catch(SQLException e){
-            e.printStackTrace();
-            resp.setStatus(500);
-            out.print("{\"error\":\"server_error\"}");
-        }
+        response.getWriter().print(json.toString());
     }
 }
