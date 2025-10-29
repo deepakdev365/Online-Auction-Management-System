@@ -13,7 +13,7 @@ public class LoginServlet extends HttpServlet {
     // ✅ Database configuration
     private static final String DB_URL  = "jdbc:mysql://localhost:3306/online_auction";
     private static final String DB_USER = "root";
-    private static final String DB_PASS = "RJP279";
+    private static final String DB_PASS = "jyoti@2025";
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

@@ -9,13 +9,18 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #0d1117;
-            color: #c9d1d9;
+            background-color: #f8f9fa;
+            color: #1e40af;
             font-family: 'Segoe UI', sans-serif;
         }
+        .navbar {
+            background-color: #007bff !important;
+        }
+        .navbar-brand, .nav-link {
+            color: white !important;
+        }
         .nav-link.active {
-            background-color: #21262d !important;
-            color: #58a6ff !important;
+            background-color: #0056b3 !important;
             border-radius: 8px;
         }
         .section {
@@ -25,33 +30,48 @@
             display: block;
         }
         .card {
-            background-color: #161b22;
-            border: 1px solid #30363d;
+            background-color: #ffffff;
+            border: 1px solid #d1d5db;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
         }
         .btn-custom {
-            background-color: #238636;
+            background-color: #1e40af;
             color: white;
         }
         .btn-custom:hover {
-            background-color: #2ea043;
+            background-color: #2563eb;
         }
-        .card-img-top {
-            max-height: 180px;
-            object-fit: cover;
-            border-radius: 6px;
+        h3, h5 {
+            color: #1d4ed8;
+        }
+        .text-primary {
+            color: #1d4ed8 !important;
+        }
+        .text-info {
+            color: #0d6efd !important;
+        }
+        .text-warning {
+            color: #eab308 !important;
+        }
+        .text-success {
+            color: #16a34a !important;
+        }
+        .text-danger {
+            color: #dc2626 !important;
         }
     </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
-    <a class="navbar-brand" href="#">💼 Online Auction</a>
+<nav class="navbar navbar-expand-lg navbar-dark px-3">
+    <a class="navbar-brand fw-bold" href="#">💼 Online Auction</a>
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav ms-auto">
             <li class="nav-item"><a href="#" class="nav-link active" onclick="showSection('profileSection', this)">Profile</a></li>
             <li class="nav-item"><a href="#" class="nav-link" onclick="showSection('addItemSection', this)">Add Item</a></li>
             <li class="nav-item"><a href="#" class="nav-link" onclick="showSection('liveSection', this)">Live Auctions</a></li>
             <li class="nav-item"><a href="#" class="nav-link" onclick="showSection('winnerSection', this)">Winners</a></li>
+            <li class="nav-item"><a href="LogoutServlet" class="nav-link text-danger">Logout</a></li>
         </ul>
     </div>
 </nav>
@@ -66,32 +86,32 @@
 
     <!-- Add Item Section -->
     <div id="addItemSection" class="section">
-        <h3 class="mb-3 text-warning">🛒 Add New Auction Item</h3>
+        <h3 class="mb-3 text-primary">🛒 Add New Auction Item</h3>
         <form id="addItemForm" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-md-6 mb-2">
-                    <label class="form-label">Title</label>
-                    <input type="text" class="form-control" name="title" required>
+                    <label class="form-label text-primary">Title</label>
+                    <input type="text" class="form-control border-primary" name="title" required>
                 </div>
                 <div class="col-md-6 mb-2">
-                    <label class="form-label">Starting Price</label>
-                    <input type="number" class="form-control" name="start_price" required step="0.01">
+                    <label class="form-label text-primary">Starting Price</label>
+                    <input type="number" class="form-control border-primary" name="start_price" required step="0.01">
                 </div>
                 <div class="col-12 mb-2">
-                    <label class="form-label">Description</label>
-                    <textarea class="form-control" name="description" rows="2"></textarea>
+                    <label class="form-label text-primary">Description</label>
+                    <textarea class="form-control border-primary" name="description" rows="2"></textarea>
                 </div>
                 <div class="col-md-6 mb-2">
-                    <label class="form-label">Start Time (optional)</label>
-                    <input type="datetime-local" class="form-control" name="start_time">
+                    <label class="form-label text-primary">Start Time (optional)</label>
+                    <input type="datetime-local" class="form-control border-primary" name="start_time">
                 </div>
                 <div class="col-md-6 mb-2">
-                    <label class="form-label">End Time</label>
-                    <input type="datetime-local" class="form-control" name="end_time" required>
+                    <label class="form-label text-primary">End Time</label>
+                    <input type="datetime-local" class="form-control border-primary" name="end_time" required>
                 </div>
                 <div class="col-12 mb-2">
-                    <label class="form-label">Upload Image</label>
-                    <input type="file" class="form-control" name="image" accept="image/*">
+                    <label class="form-label text-primary">Upload Image</label>
+                    <input type="file" class="form-control border-primary" name="image" accept="image/*">
                 </div>
                 <div class="col-12 text-end mt-3">
                     <button type="submit" class="btn btn-custom">Add Item</button>
@@ -177,7 +197,7 @@
                         <p><b>Current Bid:</b> ${it.current_bid ? "₹" + it.current_bid : "No bids yet"}</p>
                         <form onsubmit="placeBid(event, ${it.id})">
                             <div class="input-group mb-2">
-                                <input type="number" step="0.01" class="form-control" name="bid_amount" placeholder="Your bid" required>
+                                <input type="number" step="0.01" class="form-control border-primary" name="bid_amount" placeholder="Your bid" required>
                                 <button class="btn btn-custom">Bid</button>
                             </div>
                         </form>

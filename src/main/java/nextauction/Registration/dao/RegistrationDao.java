@@ -9,7 +9,7 @@ public class RegistrationDao {
     // ✅ Database connection settings
     private static final String DB_URL  = "jdbc:mysql://localhost:3306/online_auction";
     private static final String DB_USER = "root";
-    private static final String DB_PASS = "RJP279";
+    private static final String DB_PASS = "jyoti@2025";
 
     // ✅ Method to register a new user
     public boolean registerUser(String name, String email, String password, String role) {

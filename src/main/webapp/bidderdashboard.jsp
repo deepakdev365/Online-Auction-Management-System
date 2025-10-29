@@ -2,58 +2,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Bidder Dashboard | Online Auction</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<meta charset="UTF-8">
+<title>Bidder Dashboard | Online Auction</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
-    <style>
-        body {
-            background-color: #0d1117;
-            color: #c9d1d9;
-            font-family: 'Segoe UI', sans-serif;
-        }
-        .nav-link.active {
-            background-color: #21262d !important;
-            color: #58a6ff !important;
-            border-radius: 8px;
-        }
-        .section {
-            display: none;
-        }
-        .visible {
-            display: block;
-        }
-        .card {
-            background-color: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 8px;
-        }
-        .btn-custom {
-            background-color: #238636;
-            color: white;
-        }
-        .btn-custom:hover {
-            background-color: #2ea043;
-        }
-        .card-img-top {
-            max-height: 180px;
-            object-fit: cover;
-            border-radius: 6px;
-        }
-    </style>
+<style>
+    body {
+        background-color: #f8f9fa;
+        color: #212529;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    /* ===== NAVBAR ===== */
+    .navbar {
+        background: linear-gradient(90deg, #007bff, #00bfff);
+        box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+    }
+    .navbar-brand {
+        font-weight: bold;
+        color: #fff !important;
+        text-shadow: 0 0 5px rgba(255,255,255,0.6);
+    }
+    .nav-link {
+        color: #fff !important;
+        margin-right: 10px;
+        transition: 0.3s;
+    }
+    .nav-link:hover {
+        color: #ffe082 !important;
+    }
+    .nav-link.active {
+        background: rgba(255,255,255,0.2);
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(255,255,255,0.3);
+    }
+
+    /* ===== SECTIONS ===== */
+    .section {
+        display: none;
+        animation: fadeIn 0.5s ease-in-out;
+    }
+    .visible {
+        display: block;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== HEADINGS ===== */
+    h3 {
+        border-left: 4px solid #007bff;
+        padding-left: 12px;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+    /* ===== CARDS ===== */
+    .card {
+        background: #ffffff;
+        border: 1px solid #dee2e6;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    }
+    .card-img-top {
+        max-height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    /* ===== BUTTON ===== */
+    .btn-custom {
+        background: linear-gradient(90deg, #007bff, #00bfff);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        transition: 0.3s;
+        font-weight: 600;
+    }
+    .btn-custom:hover {
+        background: linear-gradient(90deg, #00bfff, #007bff);
+        transform: scale(1.05);
+        box-shadow: 0 0 10px rgba(0,123,255,0.4);
+    }
+
+    /* ===== PROFILE IMAGE ===== */
+    #profileDetails img {
+        border-radius: 50%;
+        box-shadow: 0 0 12px rgba(0,123,255,0.3);
+    }
+</style>
 </head>
 <body>
 
 <!-- ===== NAVBAR ===== -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+<nav class="navbar navbar-expand-lg navbar-dark px-3 py-2">
     <a class="navbar-brand" href="#">💰 Online Auction</a>
-    <div class="collapse navbar-collapse">
+    <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
         <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a href="#" class="nav-link active" onclick="showSection('profileSection', this)">Profile</a></li>
-            <li class="nav-item"><a href="#" class="nav-link" onclick="showSection('liveSection', this)">Live Auctions</a></li>
-            <li class="nav-item"><a href="#" class="nav-link" onclick="showSection('wonSection', this)">Won Auctions</a></li>
-            <li class="nav-item"><a href="logout.jsp" class="nav-link text-danger">Logout</a></li>
+            <li class="nav-item"><a href="#" class="nav-link active" onclick="showSection('profileSection', this)"><i class="bi bi-person-circle me-1"></i>Profile</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" onclick="showSection('liveSection', this)"><i class="bi bi-lightning-fill me-1"></i>Live Auctions</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" onclick="showSection('wonSection', this)"><i class="bi bi-trophy-fill me-1"></i>Won Auctions</a></li>
+            <li class="nav-item"><a href="logout.jsp" class="nav-link text-warning"><i class="bi bi-box-arrow-right me-1"></i>Logout</a></li>
         </ul>
     </div>
 </nav>
@@ -62,26 +122,26 @@
 
     <!-- ===== PROFILE SECTION ===== -->
     <div id="profileSection" class="section visible">
-        <h3 class="mb-3 text-info">👤 My Profile</h3>
-        <div id="profileDetails" class="card p-3"></div>
+        <h3><i class="bi bi-person-badge"></i> My Profile</h3>
+        <div id="profileDetails" class="card p-4 text-center"></div>
     </div>
 
     <!-- ===== LIVE AUCTIONS ===== -->
     <div id="liveSection" class="section">
-        <h3 class="mb-3 text-warning">🔥 Live Auctions</h3>
-        <div id="liveAuctions" class="row"></div>
+        <h3><i class="bi bi-fire text-danger"></i> Live Auctions</h3>
+        <div id="liveAuctions" class="row g-4"></div>
     </div>
 
     <!-- ===== WON AUCTIONS ===== -->
     <div id="wonSection" class="section">
-        <h3 class="mb-3 text-success">🏆 Won Auctions</h3>
-        <div id="wonAuctions" class="row"></div>
+        <h3><i class="bi bi-trophy text-success"></i> Won Auctions</h3>
+        <div id="wonAuctions" class="row g-4"></div>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // ===== NAVIGATION HANDLER =====
+    // ===== SECTION HANDLER =====
     function showSection(id, el) {
         document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
         document.getElementById(id).classList.add('visible');
@@ -94,9 +154,10 @@
         const res = await fetch('profile');
         if (res.ok) {
             const data = await res.json();
-            document.getElementById('profileDetails').innerHTML = data.error 
-                ? `<p class='text-danger'>${data.error}</p>` 
-                : `<p><b>Name:</b> ${data.name}</p>
+            document.getElementById('profileDetails').innerHTML = data.error
+                ? `<p class='text-danger'>${data.error}</p>`
+                : `<img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" width="100" class="mb-3">
+                   <h4>${data.name}</h4>
                    <p><b>Email:</b> ${data.email}</p>
                    <p><b>Role:</b> ${data.role}</p>`;
         }
@@ -114,8 +175,8 @@
 
         items.forEach(it => {
             container.innerHTML += `
-                <div class="col-md-4 mb-3">
-                    <div class="card p-3">
+                <div class="col-md-4">
+                    <div class="card p-3 h-100">
                         ${it.image_path ? `<img src="${it.image_path}" class="card-img-top mb-2">` : ''}
                         <h5>${it.title}</h5>
                         <p>${it.description}</p>
@@ -124,8 +185,8 @@
                         <p><b>Current Bid:</b> ${it.current_bid ? "₹" + it.current_bid : "No bids yet"}</p>
                         <form onsubmit="placeBid(event, ${it.id})">
                             <div class="input-group mb-2">
-                                <input type="number" step="0.01" class="form-control" name="bid_amount" placeholder="Your bid" required>
-                                <button class="btn btn-custom">Place Bid</button>
+                                <input type="number" step="0.01" class="form-control" name="bid_amount" placeholder="Enter your bid" required>
+                                <button class="btn btn-custom"><i class="bi bi-cash-coin me-1"></i>Bid</button>
                             </div>
                         </form>
                         <small class="text-muted">Ends: ${it.end_time}</small>
@@ -162,8 +223,8 @@
 
         list.forEach(w => {
             container.innerHTML += `
-                <div class="col-md-4 mb-3">
-                    <div class="card p-3">
+                <div class="col-md-4">
+                    <div class="card p-3 h-100">
                         ${w.image_path ? `<img src="${w.image_path}" class="card-img-top mb-2">` : ''}
                         <h5>${w.title}</h5>
                         <p><b>Final Bid:</b> ₹${w.current_bid || 0}</p>
@@ -176,14 +237,13 @@
     }
 
     // ===== AUTO REFRESH =====
-    setInterval(loadLiveAuctions, 5000);
-    setInterval(loadWonAuctions, 10000);
+    setInterval(loadLiveAuctions, 6000);
+    setInterval(loadWonAuctions, 12000);
 
     // ===== INITIAL LOAD =====
     loadProfile();
     loadLiveAuctions();
     loadWonAuctions();
 </script>
-
 </body>
 </html>
