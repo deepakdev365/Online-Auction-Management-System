@@ -56,6 +56,6 @@
 			<attribute name="m2e-apt" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/dell/Downloads/mysql-connector-j-8.0.33.jar"/>
+	<classpathentry kind="lib" path="D:/download/mysql-connector-java-8.0.30/mysql-connector-java-8.0.30/mysql-connector-java-8.0.30.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

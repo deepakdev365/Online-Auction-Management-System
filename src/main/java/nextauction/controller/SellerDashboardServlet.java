@@ -1,4 +1,4 @@
-package nextauction.servlet;
+package nextauction.controller;
 
 import java.io.*;
 import java.nio.file.Paths;

@@ -7,66 +7,115 @@
     <title>Seller Dashboard | Online Auction</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
         body {
-            background-color: #0d1117;
-            color: #c9d1d9;
+            background-color: #f5f7fa;
+            color: #222;
             font-family: 'Segoe UI', sans-serif;
         }
-        .nav-link.active {
-            background-color: #21262d !important;
-            color: #58a6ff !important;
+
+        .navbar {
+            background: #0d6efd !important;
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+            color: #fff !important;
+        }
+
+        .nav-link {
+            color: #f0f4ff !important;
+            margin-right: 8px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background-color: #fff !important;
+            color: #0d6efd !important;
             border-radius: 8px;
         }
+
         .section {
             display: none;
         }
+
         .visible {
             display: block;
         }
+
         .card {
-            background-color: #161b22;
-            border: 1px solid #30363d;
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
-        .btn-custom {
-            background-color: #238636;
-            color: white;
-        }
-        .btn-custom:hover {
-            background-color: #2ea043;
-        }
+
         .card-img-top {
             max-height: 180px;
             object-fit: cover;
             border-radius: 6px;
         }
+
+        .btn-custom {
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+        }
+
+        .btn-custom:hover {
+            background-color: #0b5ed7;
+        }
+
+        .logout-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 14px;
+        }
+
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+
+        h3 {
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+<!-- 🔹 NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark px-3">
     <a class="navbar-brand" href="#">💼 Online Auction</a>
     <div class="collapse navbar-collapse">
-        <ul class="navbar-nav ms-auto">
+        <ul class="navbar-nav ms-auto align-items-center">
             <li class="nav-item"><a href="#" class="nav-link active" onclick="showSection('profileSection', this)">Profile</a></li>
             <li class="nav-item"><a href="#" class="nav-link" onclick="showSection('addItemSection', this)">Add Item</a></li>
             <li class="nav-item"><a href="#" class="nav-link" onclick="showSection('liveSection', this)">Live Auctions</a></li>
             <li class="nav-item"><a href="#" class="nav-link" onclick="showSection('winnerSection', this)">Winners</a></li>
+            <li class="nav-item ms-3">
+                <form action="logout.jsp" method="post" class="d-inline">
+                    <button type="submit" class="logout-btn">🚪 Logout</button>
+                </form>
+            </li>
         </ul>
     </div>
 </nav>
 
+<!-- 🔹 MAIN CONTENT -->
 <div class="container py-4">
 
-    <!-- Profile Section -->
+    <!-- 👤 PROFILE SECTION -->
     <div id="profileSection" class="section visible">
-        <h3 class="mb-3 text-info">👤 My Profile</h3>
-        <div id="profileDetails" class="card p-3"></div>
+        <h3 class="mb-3 text-primary">👤 My Profile</h3>
+        <div id="profileDetails" class="card p-3 shadow-sm"></div>
     </div>
 
-    <!-- Add Item Section -->
+    <!-- 🛒 ADD ITEM SECTION -->
     <div id="addItemSection" class="section">
-        <h3 class="mb-3 text-warning">🛒 Add New Auction Item</h3>
+        <h3 class="mb-3 text-info">🛒 Add New Auction Item</h3>
         <form id="addItemForm" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-md-6 mb-2">
@@ -77,6 +126,24 @@
                     <label class="form-label">Starting Price</label>
                     <input type="number" class="form-control" name="start_price" required step="0.01">
                 </div>
+
+                <!-- 🆕 CATEGORY FIELD -->
+                <div class="col-md-6 mb-2">
+                    <label class="form-label">Category</label>
+                    <select class="form-select" name="category" required>
+                        <option value="">-- Select Category --</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Vehicles">Vehicles</option>
+                        <option value="Home & Garden">Home & Garden</option>
+                        <option value="Collectibles">Collectibles</option>
+                        <option value="Art">Art</option>
+                        <option value="Fashion">Fashion</option>
+                        <option value="Jewelry">Jewelry</option>
+                        <option value="Sports">Sports</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
                 <div class="col-12 mb-2">
                     <label class="form-label">Description</label>
                     <textarea class="form-control" name="description" rows="2"></textarea>
@@ -101,20 +168,21 @@
         <div id="addItemMsg" class="mt-3"></div>
     </div>
 
-    <!-- Live Auctions Section -->
+    <!-- 🔥 LIVE AUCTIONS -->
     <div id="liveSection" class="section">
         <h3 class="mb-3 text-success">🔥 Live Auctions</h3>
         <div id="liveAuctions" class="row"></div>
     </div>
 
-    <!-- Winners Section -->
+    <!-- 🏆 WINNERS -->
     <div id="winnerSection" class="section">
-        <h3 class="mb-3 text-primary">🏆 Winners</h3>
+        <h3 class="mb-3 text-warning">🏆 Winners</h3>
         <div id="winnersList" class="row"></div>
     </div>
 
 </div>
 
+<!-- 🔹 JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     // ===== NAVIGATION =====
@@ -172,35 +240,14 @@
                         ${it.image_path ? `<img src="${it.image_path}" class="card-img-top mb-2">` : ''}
                         <h5>${it.title}</h5>
                         <p>${it.description}</p>
-                        <p><b>Seller:</b> ${it.seller_name}</p>
+                        <p><b>Category:</b> ${it.category || 'N/A'}</p>
                         <p><b>Start Price:</b> ₹${it.start_price}</p>
                         <p><b>Current Bid:</b> ${it.current_bid ? "₹" + it.current_bid : "No bids yet"}</p>
-                        <form onsubmit="placeBid(event, ${it.id})">
-                            <div class="input-group mb-2">
-                                <input type="number" step="0.01" class="form-control" name="bid_amount" placeholder="Your bid" required>
-                                <button class="btn btn-custom">Bid</button>
-                            </div>
-                        </form>
                         <small class="text-muted">Ends: ${it.end_time}</small>
                     </div>
                 </div>
             `;
         });
-    }
-
-    // ===== PLACE BID =====
-    async function placeBid(e, itemId) {
-        e.preventDefault();
-        const form = e.target;
-        const bid = form.bid_amount.value;
-        const formData = new URLSearchParams();
-        formData.append("item_id", itemId);
-        formData.append("bid_amount", bid);
-
-        const res = await fetch('placeBid', { method: 'POST', body: formData });
-        const data = await res.json();
-        alert(data.success ? "✅ Bid placed successfully!" : "⚠️ " + (data.error || "Failed to bid"));
-        loadLiveAuctions();
     }
 
     // ===== LOAD WINNERS =====
@@ -221,7 +268,7 @@
                         <h5>${w.title}</h5>
                         <p><b>Winner:</b> ${w.winner_name || 'No winner'}</p>
                         <p><b>Final Bid:</b> ₹${w.current_bid || 0}</p>
-                        <p><b>Seller:</b> ${w.seller_name}</p>
+                        <p><b>Category:</b> ${w.category || 'N/A'}</p>
                         <small class="text-muted">Ended: ${w.end_time}</small>
                     </div>
                 </div>

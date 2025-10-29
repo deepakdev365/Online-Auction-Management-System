@@ -1,4 +1,4 @@
-package nextauction.servlet;
+package nextauction.controller;
 
 import nextauction.util.DBUtil;
 import javax.servlet.ServletException;
