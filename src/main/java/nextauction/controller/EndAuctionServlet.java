@@ -1,4 +1,4 @@
-package nextauction.servlet;
+package nextauction.controller;
 
 
 import javax.servlet.*;

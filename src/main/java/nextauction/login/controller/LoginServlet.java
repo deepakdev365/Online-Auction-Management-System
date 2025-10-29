@@ -60,17 +60,22 @@ public class LoginServlet extends HttpServlet {
                 session.setAttribute("email", email);
                 session.setAttribute("role", role);
 
-                // --- Redirect based on user role ---
+                // ✅ Fix: also set sellerId for SellerDashboard.jsp
                 if ("seller".equalsIgnoreCase(role)) {
-                    response.sendRedirect("SellerDashboard.jsp");  // ✅ case must match actual filename
+                    session.setAttribute("sellerId", userId);
+                }
+
+                // --- Redirect based on role ---
+                if ("seller".equalsIgnoreCase(role)) {
+                    response.sendRedirect("SellerDashboard.jsp");
                 } else if ("bidder".equalsIgnoreCase(role)) {
-                    response.sendRedirect("bidderdashboard.jsp");  // ✅ case must match actual filename
+                    response.sendRedirect("bidderdashboard.jsp");
                 } else {
                     response.sendRedirect("login.jsp?error=role");
                 }
 
             } else {
-                // ❌ Invalid email or password
+                // ❌ Invalid credentials
                 response.sendRedirect("login.jsp?error=invalid");
             }
 
@@ -81,7 +86,7 @@ public class LoginServlet extends HttpServlet {
             e.printStackTrace();
             response.sendRedirect("login.jsp?error=db");
         } finally {
-            // --- Close resources safely ---
+            // --- Close resources ---
             try { if (rs != null) rs.close(); } catch (SQLException ignored) {}
             try { if (ps != null) ps.close(); } catch (SQLException ignored) {}
             try { if (con != null) con.close(); } catch (SQLException ignored) {}
