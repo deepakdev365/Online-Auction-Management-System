@@ -11,239 +11,273 @@
 <style>
     body {
         background-color: #f8f9fa;
-        color: #212529;
-        font-family: 'Poppins', sans-serif;
+        font-family: 'Segoe UI', sans-serif;
+        display: flex;
+        min-height: 100vh;
+        margin: 0;
     }
 
-    /* ===== NAVBAR ===== */
-    .navbar {
-        background: linear-gradient(90deg, #007bff, #00bfff);
-        box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+    /* Sidebar */
+    .sidebar {
+        width: 250px;
+        background-color: #0d6efd;
+        color: white;
+        padding-top: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: fixed;
+        height: 100%;
+        box-shadow: 2px 0 8px rgba(0,0,0,0.1);
     }
-    .navbar-brand {
+
+    /* Profile inside sidebar */
+    .sidebar .profile-summary {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+    .sidebar .profile-summary img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        border: 2px solid white;
+    }
+    .sidebar .profile-summary h6 {
+        margin-top: 10px;
+        font-weight: 600;
+    }
+    .sidebar .profile-summary p {
+        font-size: 13px;
+        color: #e0e0e0;
+        margin: 0;
+    }
+
+    .sidebar h4 {
         font-weight: bold;
-        color: #fff !important;
-        text-shadow: 0 0 5px rgba(255,255,255,0.6);
+        margin-bottom: 20px;
     }
-    .nav-link {
-        color: #fff !important;
-        margin-right: 10px;
+
+    .sidebar .nav-link {
+        color: white;
+        padding: 12px 20px;
+        width: 100%;
+        text-align: left;
+        border-radius: 5px;
         transition: 0.3s;
     }
-    .nav-link:hover {
-        color: #ffe082 !important;
-    }
-    .nav-link.active {
-        background: rgba(255,255,255,0.2);
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(255,255,255,0.3);
+
+    .sidebar .nav-link:hover, .sidebar .nav-link.active {
+        background-color: #0b5ed7;
+        text-decoration: none;
     }
 
-    /* ===== SECTIONS ===== */
+    /* Main content */
+    .main-content {
+        margin-left: 250px;
+        padding: 30px;
+        width: 100%;
+    }
+
+    /* Sections */
     .section {
         display: none;
-        animation: fadeIn 0.5s ease-in-out;
     }
     .visible {
         display: block;
+        animation: fadeIn 0.4s ease;
     }
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ===== HEADINGS ===== */
-    h3 {
-        border-left: 4px solid #007bff;
-        padding-left: 12px;
-        margin-bottom: 20px;
-        font-weight: 600;
-    }
-
-    /* ===== CARDS ===== */
+    /* Cards */
     .card {
-        background: #ffffff;
+        border-radius: 10px;
         border: 1px solid #dee2e6;
-        border-radius: 12px;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        transition: 0.3s;
     }
     .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 18px rgba(0,0,0,0.1);
-    }
-    .card-img-top {
-        max-height: 200px;
-        object-fit: cover;
-        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transform: translateY(-3px);
     }
 
-    /* ===== BUTTON ===== */
+    /* Buttons */
     .btn-custom {
-        background: linear-gradient(90deg, #007bff, #00bfff);
+        background-color: #0d6efd;
         color: white;
         border: none;
-        border-radius: 8px;
-        transition: 0.3s;
-        font-weight: 600;
     }
     .btn-custom:hover {
-        background: linear-gradient(90deg, #00bfff, #007bff);
-        transform: scale(1.05);
-        box-shadow: 0 0 10px rgba(0,123,255,0.4);
+        background-color: #0b5ed7;
     }
 
-    /* ===== PROFILE IMAGE ===== */
-    #profileDetails img {
+    /* Profile Section in main area */
+    .profile-box {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .profile-box img {
+        width: 100px;
+        height: 100px;
         border-radius: 50%;
-        box-shadow: 0 0 12px rgba(0,123,255,0.3);
+        border: 2px solid #0d6efd;
     }
 </style>
 </head>
 <body>
 
-<!-- ===== NAVBAR ===== -->
-<nav class="navbar navbar-expand-lg navbar-dark px-3 py-2">
-    <a class="navbar-brand" href="#">💰 Online Auction</a>
-    <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navMenu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navMenu">
-        <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a href="#" class="nav-link active" onclick="showSection('profileSection', this)"><i class="bi bi-person-circle me-1"></i>Profile</a></li>
-            <li class="nav-item"><a href="#" class="nav-link" onclick="showSection('liveSection', this)"><i class="bi bi-lightning-fill me-1"></i>Live Auctions</a></li>
-            <li class="nav-item"><a href="#" class="nav-link" onclick="showSection('wonSection', this)"><i class="bi bi-trophy-fill me-1"></i>Won Auctions</a></li>
-            <li class="nav-item"><a href="logout.jsp" class="nav-link text-warning"><i class="bi bi-box-arrow-right me-1"></i>Logout</a></li>
-        </ul>
-    </div>
-</nav>
+<!-- Sidebar -->
+<div class="sidebar">
+  <h4>💰 Auction</h4>
 
-<div class="container py-4">
+  <!-- Profile summary always visible in sidebar -->
+  <div class="profile-summary">
+    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile">
+    <h6 id="sidebarName">John Doe</h6>
+    <p id="sidebarEmail">johndoe@example.com</p>
+  </div>
 
-    <!-- ===== PROFILE SECTION ===== -->
-    <div id="profileSection" class="section visible">
-        <h3><i class="bi bi-person-badge"></i> My Profile</h3>
-        <div id="profileDetails" class="card p-4 text-center"></div>
-    </div>
+  <!-- Sidebar navigation -->
+  <a href="#" class="nav-link active" onclick="showSection('profileSection', this)">
+    <i class="bi bi-person-circle me-2"></i>Profile
+  </a>
+  <a href="#" class="nav-link" onclick="showSection('liveSection', this)">
+    <i class="bi bi-lightning-charge-fill me-2"></i>Live Auctions
+  </a>
+  <a href="#" class="nav-link" onclick="showSection('wonSection', this)">
+    <i class="bi bi-trophy-fill me-2"></i>Won Auctions
+  </a>
+  <a href="logout.jsp" class="nav-link text-warning mt-auto">
+    <i class="bi bi-box-arrow-right me-2"></i>Logout
+  </a>
+</div>
 
-    <!-- ===== LIVE AUCTIONS ===== -->
-    <div id="liveSection" class="section">
-        <h3><i class="bi bi-fire text-danger"></i> Live Auctions</h3>
-        <div id="liveAuctions" class="row g-4"></div>
-    </div>
+<!-- Main Content -->
+<div class="main-content">
 
-    <!-- ===== WON AUCTIONS ===== -->
-    <div id="wonSection" class="section">
-        <h3><i class="bi bi-trophy text-success"></i> Won Auctions</h3>
-        <div id="wonAuctions" class="row g-4"></div>
+  <!-- Profile -->
+  <div id="profileSection" class="section visible">
+    <h4 class="mb-3 text-primary"><i class="bi bi-person-circle me-2"></i>My Profile</h4>
+    <div id="profileDetails" class="profile-box">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile">
+      <div>
+        <h5 id="userName">John Doe</h5>
+        <p id="userEmail" class="mb-1 text-secondary">johndoe@example.com</p>
+        <p id="userRole" class="text-secondary">Role: Bidder</p>
+      </div>
     </div>
+  </div>
+
+  <!-- Live Auctions -->
+  <div id="liveSection" class="section">
+    <h4 class="mb-3 text-primary"><i class="bi bi-lightning-charge-fill me-2"></i>Live Auctions</h4>
+    <div id="liveAuctions" class="row g-3"></div>
+  </div>
+
+  <!-- Won Auctions -->
+  <div id="wonSection" class="section">
+    <h4 class="mb-3 text-success"><i class="bi bi-trophy-fill me-2"></i>Won Auctions</h4>
+    <div id="wonAuctions" class="row g-3"></div>
+  </div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // ===== SECTION HANDLER =====
-    function showSection(id, el) {
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
-        document.getElementById(id).classList.add('visible');
-        document.querySelectorAll('.nav-link').forEach(a => a.classList.remove('active'));
-        el.classList.add('active');
+  // Switch sections
+  function showSection(id, el) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
+    document.getElementById(id).classList.add('visible');
+    document.querySelectorAll('.nav-link').forEach(a => a.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // Load data
+  async function loadProfile() {
+    const res = await fetch('profile');
+    if (res.ok) {
+      const data = await res.json();
+      document.getElementById('userName').textContent = data.name || 'User';
+      document.getElementById('userEmail').textContent = data.email || '';
+      document.getElementById('userRole').textContent = "Role: " + (data.role || 'Bidder');
+
+      // Sidebar update
+      document.getElementById('sidebarName').textContent = data.name || 'User';
+      document.getElementById('sidebarEmail').textContent = data.email || '';
     }
+  }
 
-    // ===== LOAD PROFILE =====
-    async function loadProfile() {
-        const res = await fetch('profile');
-        if (res.ok) {
-            const data = await res.json();
-            document.getElementById('profileDetails').innerHTML = data.error
-                ? `<p class='text-danger'>${data.error}</p>`
-                : `<img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" width="100" class="mb-3">
-                   <h4>${data.name}</h4>
-                   <p><b>Email:</b> ${data.email}</p>
-                   <p><b>Role:</b> ${data.role}</p>`;
-        }
-    }
+  async function loadLiveAuctions() {
+    const res = await fetch('live');
+    const container = document.getElementById('liveAuctions');
+    if (!res.ok) { container.innerHTML = `<p class='text-danger'>Error loading auctions</p>`; return; }
 
-    // ===== LOAD LIVE AUCTIONS =====
-    async function loadLiveAuctions() {
-        const res = await fetch('live');
-        const container = document.getElementById('liveAuctions');
-        if (!res.ok) { container.innerHTML = `<p class='text-danger'>Error loading auctions</p>`; return; }
+    const items = await res.json();
+    container.innerHTML = items.length ? '' : `<p class='text-secondary'>No live auctions.</p>`;
 
-        const items = await res.json();
-        container.innerHTML = '';
-        if (items.length === 0) { container.innerHTML = `<p class='text-secondary'>No live auctions available right now.</p>`; return; }
+    items.forEach(it => {
+      container.innerHTML += `
+        <div class="col-md-4">
+          <div class="card p-3">
+            ${it.image_path ? `<img src="${it.image_path}" class="card-img-top mb-2" style="border-radius:8px;">` : ''}
+            <h6>${it.title}</h6>
+            <p>${it.description}</p>
+            <p><b>Start:</b> ₹${it.start_price}</p>
+            <p><b>Current:</b> ${it.current_bid ? "₹" + it.current_bid : "No bids yet"}</p>
+            <form onsubmit="placeBid(event, ${it.id})">
+              <div class="input-group">
+                <input type="number" class="form-control" name="bid_amount" placeholder="Enter bid" required>
+                <button class="btn btn-custom">Bid</button>
+              </div>
+            </form>
+          </div>
+        </div>`;
+    });
+  }
 
-        items.forEach(it => {
-            container.innerHTML += `
-                <div class="col-md-4">
-                    <div class="card p-3 h-100">
-                        ${it.image_path ? `<img src="${it.image_path}" class="card-img-top mb-2">` : ''}
-                        <h5>${it.title}</h5>
-                        <p>${it.description}</p>
-                        <p><b>Seller:</b> ${it.seller_name}</p>
-                        <p><b>Start Price:</b> ₹${it.start_price}</p>
-                        <p><b>Current Bid:</b> ${it.current_bid ? "₹" + it.current_bid : "No bids yet"}</p>
-                        <form onsubmit="placeBid(event, ${it.id})">
-                            <div class="input-group mb-2">
-                                <input type="number" step="0.01" class="form-control" name="bid_amount" placeholder="Enter your bid" required>
-                                <button class="btn btn-custom"><i class="bi bi-cash-coin me-1"></i>Bid</button>
-                            </div>
-                        </form>
-                        <small class="text-muted">Ends: ${it.end_time}</small>
-                    </div>
-                </div>
-            `;
-        });
-    }
-
-    // ===== PLACE BID =====
-    async function placeBid(e, itemId) {
-        e.preventDefault();
-        const form = e.target;
-        const bid = form.bid_amount.value;
-        const formData = new URLSearchParams();
-        formData.append("item_id", itemId);
-        formData.append("bid_amount", bid);
-
-        const res = await fetch('placeBid', { method: 'POST', body: formData });
-        const data = await res.json();
-        alert(data.success ? "✅ Bid placed successfully!" : "⚠️ " + (data.error || "Failed to bid"));
-        loadLiveAuctions();
-    }
-
-    // ===== LOAD WON AUCTIONS =====
-    async function loadWonAuctions() {
-        const res = await fetch('wonAuctions');
-        const container = document.getElementById('wonAuctions');
-        if (!res.ok) { container.innerHTML = `<p class='text-danger'>Error loading data</p>`; return; }
-
-        const list = await res.json();
-        container.innerHTML = '';
-        if (list.length === 0) { container.innerHTML = `<p class='text-secondary'>You haven't won any auctions yet.</p>`; return; }
-
-        list.forEach(w => {
-            container.innerHTML += `
-                <div class="col-md-4">
-                    <div class="card p-3 h-100">
-                        ${w.image_path ? `<img src="${w.image_path}" class="card-img-top mb-2">` : ''}
-                        <h5>${w.title}</h5>
-                        <p><b>Final Bid:</b> ₹${w.current_bid || 0}</p>
-                        <p><b>Seller:</b> ${w.seller_name}</p>
-                        <small class="text-muted">Ended: ${w.end_time}</small>
-                    </div>
-                </div>
-            `;
-        });
-    }
-
-    // ===== AUTO REFRESH =====
-    setInterval(loadLiveAuctions, 6000);
-    setInterval(loadWonAuctions, 12000);
-
-    // ===== INITIAL LOAD =====
-    loadProfile();
+  async function placeBid(e, id) {
+    e.preventDefault();
+    const form = e.target;
+    const bid = form.bid_amount.value;
+    const body = new URLSearchParams({ item_id: id, bid_amount: bid });
+    const res = await fetch('placeBid', { method: 'POST', body });
+    const data = await res.json();
+    alert(data.success ? "✅ Bid placed successfully!" : "⚠️ " + (data.error || "Failed to place bid"));
     loadLiveAuctions();
-    loadWonAuctions();
+  }
+
+  async function loadWonAuctions() {
+    const res = await fetch('wonAuctions');
+    const container = document.getElementById('wonAuctions');
+    if (!res.ok) { container.innerHTML = `<p class='text-danger'>Error loading</p>`; return; }
+
+    const list = await res.json();
+    container.innerHTML = list.length ? '' : `<p class='text-secondary'>No won auctions yet.</p>`;
+
+    list.forEach(w => {
+      container.innerHTML += `
+        <div class="col-md-4">
+          <div class="card p-3">
+            ${w.image_path ? `<img src="${w.image_path}" class="card-img-top mb-2" style="border-radius:8px;">` : ''}
+            <h6>${w.title}</h6>
+            <p><b>Final Bid:</b> ₹${w.current_bid || 0}</p>
+            <p><b>Seller:</b> ${w.seller_name}</p>
+          </div>
+        </div>`;
+    });
+  }
+
+  // Auto-refresh
+  setInterval(loadLiveAuctions, 8000);
+  loadProfile();
+  loadLiveAuctions();
+  loadWonAuctions();
 </script>
 </body>
 </html>

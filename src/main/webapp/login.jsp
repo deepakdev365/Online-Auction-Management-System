@@ -9,36 +9,41 @@
 
     <style>
         body {
-            background-color: #0d1117;
-            color: #c9d1d9;
+            background-color: #f8f9fa;
+            color: #212529;
             font-family: 'Segoe UI', sans-serif;
         }
         .login-container {
             max-width: 420px;
             margin: 100px auto;
-            background-color: #161b22;
+            background-color: #ffffff;
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.4);
-            border: 1px solid #30363d;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h3 {
+            color: #0d6efd;
         }
         .btn-login {
-            background-color: #238636;
+            background-color: #0d6efd;
             color: white;
+            border: none;
         }
         .btn-login:hover {
-            background-color: #2ea043;
+            background-color: #0b5ed7;
         }
         a {
-            color: #58a6ff;
+            color: #0d6efd;
             text-decoration: none;
         }
         a:hover {
             text-decoration: underline;
         }
         .text-error {
-            color: #ff6b6b;
+            color: #dc3545;
             font-size: 14px;
+            text-align: center;
         }
     </style>
 </head>
@@ -67,7 +72,7 @@
             </div>
         </form>
 
-        <hr class="my-4" style="border-color:#30363d;">
+        <hr class="my-4">
         <p class="text-center small">Don’t have an account? <a href="register.jsp">Register</a></p>
     </div>
 
