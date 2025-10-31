@@ -1,4 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+    HttpSession sessionObj = request.getSession(false);
+    if (sessionObj == null || sessionObj.getAttribute("sellerName") == null) {
+        response.sendRedirect("SellerLogin.jsp");
+        return;
+    }
+    String sellerName = (String) sessionObj.getAttribute("sellerName");
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,13 +18,14 @@
 
     <style>
         body {
-            background-color: #f5f7fa;
-            color: #222;
-            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0d1117, #161b22);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
         }
 
         .navbar {
-            background: #0d6efd !important;
+            background: #007bff;
+            padding: 15px;
         }
 
         .navbar-brand {
@@ -25,266 +34,119 @@
         }
 
         .nav-link {
-            color: #f0f4ff !important;
-            margin-right: 8px;
-            transition: background 0.3s, color 0.3s;
+            color: #eaeaea !important;
+            font-weight: 500;
+            margin-right: 15px;
         }
 
-        .nav-link:hover, .nav-link.active {
-            background-color: #fff !important;
-            color: #0d6efd !important;
-            border-radius: 8px;
-        }
-
-        .section {
-            display: none;
-        }
-
-        .visible {
-            display: block;
-        }
-
-        .card {
-            background-color: #ffffff;
-            border: 1px solid #dee2e6;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .card-img-top {
-            max-height: 180px;
-            object-fit: cover;
-            border-radius: 6px;
-        }
-
-        .btn-custom {
-            background-color: #0d6efd;
-            color: white;
-            border: none;
-        }
-
-        .btn-custom:hover {
-            background-color: #0b5ed7;
+        .nav-link:hover {
+            color: #fff !important;
+            text-decoration: underline;
         }
 
         .logout-btn {
-            background-color: #dc3545;
-            color: white;
+            background: #ff4d4d;
+            color: #fff;
             border: none;
+            padding: 7px 15px;
             border-radius: 6px;
-            padding: 6px 14px;
+            font-weight: 500;
         }
 
         .logout-btn:hover {
-            background-color: #c82333;
+            background: #e63e3e;
         }
 
-        h3 {
+        .container {
+            max-width: 1100px;
+            margin-top: 50px;
+        }
+
+        h2 {
+            color: #00bfff;
             font-weight: 600;
+            text-align: center;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.08);
+            border: none;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 0 12px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            background: rgba(255,255,255,0.12);
+        }
+
+        .card h4 {
+            color: #00bfff;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: #ccc;
+        }
+
+        .btn-primary {
+            background: #00bfff;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: #0099cc;
         }
     </style>
 </head>
+
 <body>
-
-<!-- 🔹 NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-dark px-3">
-    <a class="navbar-brand" href="#">💼 Online Auction</a>
-    <div class="collapse navbar-collapse">
-        <ul class="navbar-nav ms-auto align-items-center">
-            <li class="nav-item"><a href="#" class="nav-link active" onclick="showSection('profileSection', this)">Profile</a></li>
-            <li class="nav-item"><a href="#" class="nav-link" onclick="showSection('addItemSection', this)">Add Item</a></li>
-            <li class="nav-item"><a href="#" class="nav-link" onclick="showSection('liveSection', this)">Live Auctions</a></li>
-            <li class="nav-item"><a href="#" class="nav-link" onclick="showSection('winnerSection', this)">Winners</a></li>
-            <li class="nav-item ms-3">
-                <form action="logout.jsp" method="post" class="d-inline">
-                    <button type="submit" class="logout-btn">🚪 Logout</button>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">NextAuction</a>
+            <div class="d-flex align-items-center ms-auto">
+                <span class="me-3">Welcome, <strong><%= sellerName %></strong></span>
+                <form action="logout.jsp" method="post" class="m-0">
+                    <button type="submit" class="logout-btn">Logout</button>
                 </form>
-            </li>
-        </ul>
-    </div>
-</nav>
+            </div>
+        </div>
+    </nav>
 
-<!-- 🔹 MAIN CONTENT -->
-<div class="container py-4">
+    <!-- MAIN CONTENT -->
+    <div class="container text-center">
+        <h2>Seller Dashboard</h2>
+        <p class="mt-3">Manage your auction items, track live bids, and view winners.</p>
 
-    <!-- 👤 PROFILE SECTION -->
-    <div id="profileSection" class="section visible">
-        <h3 class="mb-3 text-primary">👤 My Profile</h3>
-        <div id="profileDetails" class="card p-3 shadow-sm"></div>
-    </div>
-
-    <!-- 🛒 ADD ITEM SECTION -->
-    <div id="addItemSection" class="section">
-        <h3 class="mb-3 text-info">🛒 Add New Auction Item</h3>
-        <form id="addItemForm" enctype="multipart/form-data">
-            <div class="row">
-                <div class="col-md-6 mb-2">
-                    <label class="form-label">Title</label>
-                    <input type="text" class="form-control" name="title" required>
-                </div>
-                <div class="col-md-6 mb-2">
-                    <label class="form-label">Starting Price</label>
-                    <input type="number" class="form-control" name="start_price" required step="0.01">
-                </div>
-
-                <!-- 🆕 CATEGORY FIELD -->
-                <div class="col-md-6 mb-2">
-                    <label class="form-label">Category</label>
-                    <select class="form-select" name="category" required>
-                        <option value="">-- Select Category --</option>
-                        <option value="Electronics">Electronics</option>
-                        <option value="Vehicles">Vehicles</option>
-                        <option value="Home & Garden">Home & Garden</option>
-                        <option value="Collectibles">Collectibles</option>
-                        <option value="Art">Art</option>
-                        <option value="Fashion">Fashion</option>
-                        <option value="Jewelry">Jewelry</option>
-                        <option value="Sports">Sports</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-
-                <div class="col-12 mb-2">
-                    <label class="form-label">Description</label>
-                    <textarea class="form-control" name="description" rows="2"></textarea>
-                </div>
-                <div class="col-md-6 mb-2">
-                    <label class="form-label">Start Time (optional)</label>
-                    <input type="datetime-local" class="form-control" name="start_time">
-                </div>
-                <div class="col-md-6 mb-2">
-                    <label class="form-label">End Time</label>
-                    <input type="datetime-local" class="form-control" name="end_time" required>
-                </div>
-                <div class="col-12 mb-2">
-                    <label class="form-label">Upload Image</label>
-                    <input type="file" class="form-control" name="image" accept="image/*">
-                </div>
-                <div class="col-12 text-end mt-3">
-                    <button type="submit" class="btn btn-custom">Add Item</button>
+        <div class="row mt-5 g-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <h4>🛒 Add Item</h4>
+                    <p>Upload your products for auction.</p>
+                    <a href="additem.jsp" class="btn btn-primary">Add New</a>
                 </div>
             </div>
-        </form>
-        <div id="addItemMsg" class="mt-3"></div>
-    </div>
 
-    <!-- 🔥 LIVE AUCTIONS -->
-    <div id="liveSection" class="section">
-        <h3 class="mb-3 text-success">🔥 Live Auctions</h3>
-        <div id="liveAuctions" class="row"></div>
-    </div>
-
-    <!-- 🏆 WINNERS -->
-    <div id="winnerSection" class="section">
-        <h3 class="mb-3 text-warning">🏆 Winners</h3>
-        <div id="winnersList" class="row"></div>
-    </div>
-
-</div>
-
-<!-- 🔹 JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    // ===== NAVIGATION =====
-    function showSection(id, el) {
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
-        document.getElementById(id).classList.add('visible');
-        document.querySelectorAll('.nav-link').forEach(a => a.classList.remove('active'));
-        el.classList.add('active');
-    }
-
-    // ===== LOAD PROFILE =====
-    async function loadProfile() {
-        const res = await fetch('profile');
-        if (res.ok) {
-            const data = await res.json();
-            document.getElementById('profileDetails').innerHTML = data.error 
-                ? `<p class='text-danger'>${data.error}</p>` 
-                : `<p><b>Name:</b> ${data.name}</p>
-                   <p><b>Email:</b> ${data.email}</p>
-                   <p><b>Role:</b> ${data.role}</p>`;
-        }
-    }
-
-    // ===== ADD ITEM =====
-    document.getElementById('addItemForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        const res = await fetch('addItem', { method: 'POST', body: formData });
-        const msgDiv = document.getElementById('addItemMsg');
-        if (res.ok) {
-            const data = await res.json();
-            msgDiv.innerHTML = data.success 
-                ? `<p class='text-success'>✅ Item added successfully (ID: ${data.id})</p>` 
-                : `<p class='text-danger'>❌ ${data.error}</p>`;
-            if (data.success) e.target.reset();
-        } else {
-            msgDiv.innerHTML = `<p class='text-danger'>⚠️ Failed to add item</p>`;
-        }
-    });
-
-    // ===== LOAD LIVE AUCTIONS =====
-    async function loadLiveAuctions() {
-        const res = await fetch('live');
-        const container = document.getElementById('liveAuctions');
-        if (!res.ok) { container.innerHTML = `<p class='text-danger'>Error loading auctions</p>`; return; }
-
-        const items = await res.json();
-        container.innerHTML = '';
-        if (items.length === 0) { container.innerHTML = `<p class='text-secondary'>No live auctions available.</p>`; return; }
-
-        items.forEach(it => {
-            container.innerHTML += `
-                <div class="col-md-4 mb-3">
-                    <div class="card p-3">
-                        ${it.image_path ? `<img src="${it.image_path}" class="card-img-top mb-2">` : ''}
-                        <h5>${it.title}</h5>
-                        <p>${it.description}</p>
-                        <p><b>Category:</b> ${it.category || 'N/A'}</p>
-                        <p><b>Start Price:</b> ₹${it.start_price}</p>
-                        <p><b>Current Bid:</b> ${it.current_bid ? "₹" + it.current_bid : "No bids yet"}</p>
-                        <small class="text-muted">Ends: ${it.end_time}</small>
-                    </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <h4>🔥 Live Auctions</h4>
+                    <p>See all your active auctions in real time.</p>
+                    <a href="liveauctions.jsp" class="btn btn-primary">View Live</a>
                 </div>
-            `;
-        });
-    }
+            </div>
 
-    // ===== LOAD WINNERS =====
-    async function loadWinners() {
-        const res = await fetch('winners');
-        const container = document.getElementById('winnersList');
-        if (!res.ok) { container.innerHTML = `<p class='text-danger'>Error loading winners</p>`; return; }
-
-        const list = await res.json();
-        container.innerHTML = '';
-        if (list.length === 0) { container.innerHTML = `<p class='text-secondary'>No auctions ended yet.</p>`; return; }
-
-        list.forEach(w => {
-            container.innerHTML += `
-                <div class="col-md-4 mb-3">
-                    <div class="card p-3">
-                        ${w.image_path ? `<img src="${w.image_path}" class="card-img-top mb-2">` : ''}
-                        <h5>${w.title}</h5>
-                        <p><b>Winner:</b> ${w.winner_name || 'No winner'}</p>
-                        <p><b>Final Bid:</b> ₹${w.current_bid || 0}</p>
-                        <p><b>Category:</b> ${w.category || 'N/A'}</p>
-                        <small class="text-muted">Ended: ${w.end_time}</small>
-                    </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <h4>🏆 Winners</h4>
+                    <p>Check the auction results and winners.</p>
+                    <a href="winners.jsp" class="btn btn-primary">View Winners</a>
                 </div>
-            `;
-        });
-    }
-
-    // ===== AUTO REFRESH =====
-    setInterval(loadLiveAuctions, 5000);
-    setInterval(loadWinners, 8000);
-
-    // ===== INITIAL LOAD =====
-    loadProfile();
-    loadLiveAuctions();
-    loadWinners();
-</script>
-
+            </div>
+        </div>
+    </div>
 </body>
 </html>
