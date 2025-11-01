@@ -1,11 +1,13 @@
 package nextauction.controller;
 
 import java.io.*;
-import java.sql.*;
 import javax.servlet.*;
 import javax.servlet.annotation.*;
 import javax.servlet.http.*;
 import org.json.JSONObject;
+import nextauction.dao.AddItemDao;
+import nextauction.model.AuctionItem;
+import nextauction.model.Seller;
 
 @WebServlet("/addItem")
 @MultipartConfig
@@ -19,6 +21,7 @@ public class AddItemServlet extends HttpServlet {
         JSONObject json = new JSONObject();
 
         try {
+            // --- Form fields ---
             String title = request.getParameter("title");
             String description = request.getParameter("description");
             String category = request.getParameter("category");
@@ -26,51 +29,57 @@ public class AddItemServlet extends HttpServlet {
             String startTime = request.getParameter("start_time");
             String endTime = request.getParameter("end_time");
 
-            // image upload handling
+            // --- Seller info from session ---
+            HttpSession session = request.getSession(false);
+            if (session == null || session.getAttribute("seller") == null) {
+                json.put("success", false);
+                json.put("error", "Session expired. Please log in again.");
+                response.getWriter().print(json);
+                return;
+            }
+
+            Seller seller = (Seller) session.getAttribute("seller");
+
+            // --- File upload ---
             Part imagePart = request.getPart("image");
             String fileName = imagePart != null ? imagePart.getSubmittedFileName() : null;
             String uploadPath = getServletContext().getRealPath("") + "uploads" + File.separator;
+            File uploadDir = new File(uploadPath);
+            if (!uploadDir.exists()) uploadDir.mkdirs();
+
             if (fileName != null && !fileName.isEmpty()) {
-                File uploadDir = new File(uploadPath);
-                if (!uploadDir.exists()) uploadDir.mkdirs();
                 imagePart.write(uploadPath + fileName);
             }
 
-            // Example DB connection (adjust table name as per your DB)
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/auctiondb", "root", "root");
-            PreparedStatement ps = con.prepareStatement(
-                "INSERT INTO auction_items (title, description, category, start_price, image_path, start_time, end_time, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, title);
-            ps.setString(2, description);
-            ps.setString(3, category);
-            ps.setDouble(4, startPrice);
-            ps.setString(5, fileName != null ? "uploads/" + fileName : null);
-            ps.setString(6, startTime);
-            ps.setString(7, endTime);
-            ps.setString(8, "active");
+            // --- Prepare auction item object ---
+            AuctionItem item = new AuctionItem();
+            item.setSellerId(seller.getSellerId());
+            item.setTitle(title);
+            item.setDescription(description);
+            item.setCategory(category);
+            item.setStartPrice(startPrice);
+            item.setStartTime(startTime);
+            item.setEndTime(endTime);
+            item.setImagePath(fileName != null ? "uploads/" + fileName : null);
 
-            int rows = ps.executeUpdate();
+            // --- Save item via DAO ---
+            AddItemDao dao = new AddItemDao();
+            int id = dao.addItem(item);
 
-            if (rows > 0) {
-                ResultSet rs = ps.getGeneratedKeys();
-                if (rs.next()) {
-                    json.put("success", true);
-                    json.put("id", rs.getInt(1));
-                }
+            if (id > 0) {
+                json.put("success", true);
+                json.put("id", id);
             } else {
                 json.put("success", false);
-                json.put("error", "Database insert failed.");
+                json.put("error", "Item could not be added. Please try again.");
             }
 
-            con.close();
         } catch (Exception e) {
+            e.printStackTrace();
             json.put("success", false);
             json.put("error", e.getMessage());
         }
 
-        PrintWriter out = response.getWriter();
-        out.print(json);
-        out.flush();
+        response.getWriter().print(json);
     }
 }
