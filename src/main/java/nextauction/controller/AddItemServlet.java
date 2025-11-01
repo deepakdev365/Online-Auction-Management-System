@@ -8,6 +8,8 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
+import org.json.JSONObject;
+
 @WebServlet("/AddItemServlet")
 //@MultipartConfig
 public class AddItemServlet extends HttpServlet {

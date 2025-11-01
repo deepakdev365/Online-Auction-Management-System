@@ -9,9 +9,9 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
-@WebServlet("/AddItemServlet")
+@WebServlet("/AddItemServlets")
 @MultipartConfig
-public class AddItemServlet extends HttpServlet {
+public class SellerDashboardServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
