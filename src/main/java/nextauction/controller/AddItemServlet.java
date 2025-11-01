@@ -1,14 +1,15 @@
 package nextauction.controller;
 
 import java.io.*;
+import java.nio.file.Paths;
 import java.sql.*;
-import javax.servlet.*;
-import javax.servlet.annotation.*;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import org.json.JSONObject;
 
-@WebServlet("/addItem")
-@MultipartConfig
+@WebServlet("/AddItemServlet")
+//@MultipartConfig
 public class AddItemServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
