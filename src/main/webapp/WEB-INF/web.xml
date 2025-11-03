@@ -75,26 +75,10 @@
   	<servlet-name>LoginServlet</servlet-name>
   	<url-pattern>/LoginServlet</url-pattern>
   </servlet-mapping>
-  <servlet-mapping>
-  	<servlet-name>SellerDetailServlet</servlet-name>
-  	<url-pattern>/SellerDetailServlet</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-  	<servlet-name>ApproveSellerServlet</servlet-name>
-  	<url-pattern>/ApproveSellerServlet</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-  	<servlet-name>RejectSellerServlet</servlet-name>
-  	<url-pattern>/RejectSellerServlet</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-  	<servlet-name>RemoveSellerServlet</servlet-name>
-  	<url-pattern>/RemoveSellerServlet</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-  	<servlet-name>RemoveItemServlet</servlet-name>
-  	<url-pattern>/RemoveItemServlet</url-pattern>
-  </servlet-mapping>
+
+ 
+
+ 
   
  
   
