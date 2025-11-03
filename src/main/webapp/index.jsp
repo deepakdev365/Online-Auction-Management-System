@@ -223,6 +223,7 @@
 <nav>
     <div class="logo">NextAuction</div>
     <div>
+    <a href="LiveAuctionPage.jsp">Live Auctions</a>
         <a href="index.jsp">Home</a>
         <a href="AboutUs.jsp">About</a>
         <a href="categories.jsp">Categories</a>
