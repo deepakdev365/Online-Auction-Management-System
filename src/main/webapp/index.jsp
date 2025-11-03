@@ -220,19 +220,19 @@
 </head>
 
 <body>
-    <!-- ---------- Navbar ---------- -->
-    <nav>
-        <div class="logo">NextAuction</div>
-        <div>
-            <a href="index.jsp">Home</a>
-            <a href="AboutUs.jsp">About</a>
-            <a href="categories.jsp">Categories</a>
-            <a href="Contact.jsp">Contact</a>
-            <a href="bidderlogin.jsp">Login</a>
-            <a href="bidderregister.jsp">Register</a>
-            <a href="sellerlogin.jsp">Sell</a>
-        </div>
-    </nav>
+<nav>
+    <div class="logo">NextAuction</div>
+    <div>
+        <a href="index.jsp">Home</a>
+        <a href="AboutUs.jsp">About</a>
+        <a href="categories.jsp">Categories</a>
+        <a href="Contact.jsp">Contact</a>
+        <a href="bidderlogin.jsp">Login</a>
+        <a href="bidderregister.jsp">Register</a>
+        <a href="sellerlogin.jsp">Sell</a>
+        <a href="adminLogin.jsp">Admin</a>
+    </div>
+</nav>
 
     <!-- ---------- Main Layout ---------- -->
     <main>
@@ -254,7 +254,7 @@
             <div class="section-card">
                 <div class="section-header">
                     <h5>🔥 Featured Items</h5>
-                    <a href="featured.jsp">View all</a>
+                    <a href="ItemView.jsp">View all</a>
                 </div>
                 <div class="item-grid">
                     <div class="item">

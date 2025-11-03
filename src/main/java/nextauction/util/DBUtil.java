@@ -5,9 +5,9 @@ import java.sql.DriverManager;
 
 public class DBUtil {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/online_auction"; 
+    private static final String URL = "jdbc:mysql://localhost:3306/auction"; 
     private static final String USER = "root"; 
-    private static final String PASSWORD = "RJP279"; 
+    private static final String PASSWORD = "Buster365@"; 
 
     static {
         try {
