@@ -9,12 +9,11 @@ public class AuctionItem {
     private String description;
     private String category;
     private double startPrice;
+    private double currentBid;
     private String imagePath;
     private Timestamp startTime;
     private Timestamp endTime;
     private String status;
-
-    // ====== Getters and Setters ======
 
     public int getItemId() {
         return itemId;
@@ -64,6 +63,14 @@ public class AuctionItem {
         this.startPrice = startPrice;
     }
 
+    public double getCurrentBid() {
+        return currentBid;
+    }
+
+    public void setCurrentBid(double currentBid) {
+        this.currentBid = currentBid;
+    }
+
     public String getImagePath() {
         return imagePath;
     }
@@ -80,7 +87,6 @@ public class AuctionItem {
         this.startTime = startTime;
     }
 
-    // Also allow setting by String (optional)
     public void setStartTime(String startTime) {
         try {
             this.startTime = Timestamp.valueOf(startTime.replace("T", " ") + ":00");
@@ -97,7 +103,6 @@ public class AuctionItem {
         this.endTime = endTime;
     }
 
-    // Also allow setting by String (optional)
     public void setEndTime(String endTime) {
         try {
             this.endTime = Timestamp.valueOf(endTime.replace("T", " ") + ":00");
