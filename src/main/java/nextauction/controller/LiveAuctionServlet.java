@@ -14,7 +14,7 @@ public class LiveAuctionServlet extends HttpServlet {
 
     private static final String DB_URL = "jdbc:mysql://localhost:3306/online_auction";
     private static final String DB_USER = "root";
-    private static final String DB_PASS = "RJP279";
+    private static final String DB_PASS = "jyoti@2025";
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

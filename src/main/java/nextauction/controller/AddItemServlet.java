@@ -14,6 +14,7 @@ import nextauction.model.Seller;
 public class AddItemServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -51,7 +52,7 @@ public class AddItemServlet extends HttpServlet {
                 imagePart.write(uploadPath + fileName);
             }
 
-            // --- Prepare auction item object ---
+            // --- Create AuctionItem object ---
             AuctionItem item = new AuctionItem();
             item.setSellerId(seller.getSellerId());
             item.setTitle(title);
@@ -62,7 +63,7 @@ public class AddItemServlet extends HttpServlet {
             item.setEndTime(endTime);
             item.setImagePath(fileName != null ? "uploads/" + fileName : null);
 
-            // --- Save item via DAO ---
+            // --- Save to DB ---
             AddItemDao dao = new AddItemDao();
             int id = dao.addItem(item);
 
