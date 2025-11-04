@@ -154,13 +154,48 @@
             margin-bottom: 12px;
         }
 
+        /* 🔍 Search bar styling */
+        .search-bar {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            align-items: center;
+            background: #f1f3f6;
+            padding: 10px 15px;
+            border-radius: 25px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            border: none;
+            outline: none;
+            background: none;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .search-bar button {
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .search-bar button:hover {
+            background: #0056b3;
+        }
+
     </style>
 
     <script>
         function showSection(section) {
             // Hide all sections
             document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
-
             // Show selected
             document.getElementById(section).style.display = 'block';
         }
@@ -186,6 +221,12 @@
 
     <!-- Main Content -->
     <div class="main-content">
+
+        <!-- 🔍 Search Bar -->
+        <form class="search-bar" action="SearchAuctionServlet" method="get">
+            <input type="text" name="query" placeholder="Search auction items..." required>
+            <button type="submit">Search</button>
+        </form>
 
         <!-- Home Section -->
         <div id="homeSection" class="section" style="display:block;">
@@ -232,3 +273,6 @@
 
 </body>
 </html>
+
+
+
