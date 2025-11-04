@@ -1,0 +1,86 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Archetype Created Web Application</display-name>
+  <servlet>
+  	<servlet-name>LoginServlet</servlet-name>
+  	<display-name>LoginServlet</display-name>
+  	<description></description>
+  	<servlet-class>nextauction.login.controller.LoginServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>SignupServlet</servlet-name>
+  	<display-name>Signup</display-name>
+  	<description></description>
+  	<servlet-class>nextauction.signup.controller.SgnupServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+  	<servlet-name>ViewUserServlet</servlet-name>
+  	<display-name>ViewUserServlet</display-name>
+  	<description></description>
+  	<servlet-class>nextauction.controller.ViewUserServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>ViewBidderServlet</servlet-name>
+  	<display-name>ViewBidderServlet</display-name>
+  	<description></description>
+  	<servlet-class>nextauction.controller.ViewBidderServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>AdminLoginServlet</servlet-name>
+  	<display-name>AdminLoginServlet</display-name>
+  	<description></description>
+  	<servlet-class>nextauction.controller.AdminLoginServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>AdminDashboardServlet</servlet-name>
+  	<display-name>AdminDashboardServlet</display-name>
+  	<description></description>
+  	<servlet-class>nextauction.controller.AdminDashboardServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>SellerDetailServlet</servlet-name>
+  	<display-name>SellerDetailServlet</display-name>
+  	<description></description>
+  	<servlet-class>nextauction.controller.SellerDetailServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>ApproveSellerServlet</servlet-name>
+  	<display-name>ApproveSellerServlet</display-name>
+  	<description></description>
+  	<servlet-class>nextauction.controller.ApproveSellerServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>RejectSellerServlet</servlet-name>
+  	<display-name>RejectSellerServlet</display-name>
+  	<description></description>
+  	<servlet-class>nextauction.controller.RejectSellerServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>RemoveSellerServlet</servlet-name>
+  	<display-name>RemoveSellerServlet</display-name>
+  	<description></description>
+  	<servlet-class>nextauction.controller.RemoveSellerServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>RemoveItemServlet</servlet-name>
+  	<display-name>RemoveItemServlet</display-name>
+  	<description></description>
+  	<servlet-class>nextauction.controller.RemoveItemServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>LoginServlet</servlet-name>
+  	<url-pattern>/LoginServlet</url-pattern>
+  </servlet-mapping>
+
+ 
+
+ 
+  
+ 
+  
+  
+</web-app>
