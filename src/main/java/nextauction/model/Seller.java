@@ -12,6 +12,7 @@ public class Seller {
     private String address;
     private String documentType;
     private String documentPath;
+    private String profileImage;
     private String role;
 
     // Getters and Setters
@@ -47,6 +48,14 @@ public class Seller {
 
     public String getDocumentPath() { return documentPath; }
     public void setDocumentPath(String documentPath) { this.documentPath = documentPath; }
+    
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
 
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }

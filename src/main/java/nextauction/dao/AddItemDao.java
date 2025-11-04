@@ -16,27 +16,35 @@ public class AddItemDao {
         String sql = "INSERT INTO auction_items (seller_id, title, description, category, start_price, image_path, start_time, end_time, status) "
                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection con = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
+        try {
+            // Load driver
             Class.forName("com.mysql.cj.jdbc.Driver");
 
-            ps.setInt(1, item.getSellerId());
-            ps.setString(2, item.getTitle());
-            ps.setString(3, item.getDescription());
-            ps.setString(4, item.getCategory());
-            ps.setDouble(5, item.getStartPrice());
-            ps.setString(6, item.getImagePath());
-            ps.setString(7, item.getStartTime());
-            ps.setString(8, item.getEndTime());
-            ps.setString(9, "active");
+            try (Connection con = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+                 PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            int rows = ps.executeUpdate();
+                // ✅ Bind values safely
+                ps.setInt(1, item.getSellerId());
+                ps.setString(2, item.getTitle());
+                ps.setString(3, item.getDescription());
+                ps.setString(4, item.getCategory());
+                ps.setDouble(5, item.getStartPrice());
+                ps.setString(6, item.getImagePath());
 
-            if (rows > 0) {
-                ResultSet rs = ps.getGeneratedKeys();
-                if (rs.next()) {
-                    generatedId = rs.getInt(1);
+                // ✅ Use setTimestamp for Timestamp values
+                ps.setTimestamp(7, item.getStartTime());
+                ps.setTimestamp(8, item.getEndTime());
+
+                ps.setString(9, "active");
+
+                int rows = ps.executeUpdate();
+
+                if (rows > 0) {
+                    try (ResultSet rs = ps.getGeneratedKeys()) {
+                        if (rs.next()) {
+                            generatedId = rs.getInt(1);
+                        }
+                    }
                 }
             }
 

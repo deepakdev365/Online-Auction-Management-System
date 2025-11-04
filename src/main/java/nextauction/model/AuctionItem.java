@@ -1,45 +1,120 @@
 package nextauction.model;
 
+import java.sql.Timestamp;
+
 public class AuctionItem {
-    private int id;
+    private int itemId;
     private int sellerId;
     private String title;
     private String description;
     private String category;
     private double startPrice;
     private String imagePath;
-    private String startTime;
-    private String endTime;
+    private Timestamp startTime;
+    private Timestamp endTime;
     private String status;
 
-    // Getters and setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    // ===== Constructors =====
+    public AuctionItem() {}
 
-    public int getSellerId() { return sellerId; }
-    public void setSellerId(int sellerId) { this.sellerId = sellerId; }
+    // ===== Getters & Setters =====
+    public int getItemId() {
+        return itemId;
+    }
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
+    public void setItemId(int itemId) {
+        this.itemId = itemId;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public int getSellerId() {
+        return sellerId;
+    }
 
-    public String getCategory() { return category; }
-    public void setCategory(String category) { this.category = category; }
+    public void setSellerId(int sellerId) {
+        this.sellerId = sellerId;
+    }
 
-    public double getStartPrice() { return startPrice; }
-    public void setStartPrice(double startPrice) { this.startPrice = startPrice; }
+    public String getTitle() {
+        return title;
+    }
 
-    public String getImagePath() { return imagePath; }
-    public void setImagePath(String imagePath) { this.imagePath = imagePath; }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-    public String getStartTime() { return startTime; }
-    public void setStartTime(String startTime) { this.startTime = startTime; }
+    public String getDescription() {
+        return description;
+    }
 
-    public String getEndTime() { return endTime; }
-    public void setEndTime(String endTime) { this.endTime = endTime; }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public double getStartPrice() {
+        return startPrice;
+    }
+
+    public void setStartPrice(double startPrice) {
+        this.startPrice = startPrice;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    public Timestamp getStartTime() {
+        return startTime;
+    }
+
+    // ✅ Accepts Timestamp directly
+    public void setStartTime(Timestamp startTime) {
+        this.startTime = startTime;
+    }
+
+    // ✅ Also allows String input like “2025-11-01T18:00”
+    public void setStartTime(String startTime) {
+        try {
+            this.startTime = Timestamp.valueOf(startTime.replace("T", " ") + ":00");
+        } catch (Exception e) {
+            this.startTime = null;
+        }
+    }
+
+    public Timestamp getEndTime() {
+        return endTime;
+    }
+
+    // ✅ Accepts Timestamp directly
+    public void setEndTime(Timestamp endTime) {
+        this.endTime = endTime;
+    }
+
+    // ✅ Also allows String input
+    public void setEndTime(String endTime) {
+        try {
+            this.endTime = Timestamp.valueOf(endTime.replace("T", " ") + ":00");
+        } catch (Exception e) {
+            this.endTime = null;
+        }
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

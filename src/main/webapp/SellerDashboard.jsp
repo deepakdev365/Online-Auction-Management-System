@@ -2,151 +2,171 @@
 <%
     HttpSession sessionObj = request.getSession(false);
     if (sessionObj == null || sessionObj.getAttribute("sellerName") == null) {
-        response.sendRedirect("SellerLogin.jsp");
+        response.sendRedirect("sellerlogin.jsp");
         return;
     }
+
     String sellerName = (String) sessionObj.getAttribute("sellerName");
+    String profileImage = (String) sessionObj.getAttribute("profileImage");
+
+    // Default placeholder if no image uploaded
+    if (profileImage == null || profileImage.isEmpty()) {
+        profileImage = "https://via.placeholder.com/100";
+    }
 %>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Seller Dashboard | Online Auction</title>
+    <title>Seller Dashboard | NextAuction</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
         body {
-            background: linear-gradient(135deg, #0d1117, #161b22);
-            color: #fff;
+            background-color: #f8f9fa;
             font-family: 'Poppins', sans-serif;
         }
 
-        .navbar {
-            background: #007bff;
-            padding: 15px;
+        /* Sidebar */
+        .sidebar {
+            height: 100vh;
+            width: 240px;
+            background-color: #0d6efd;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding-top: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .navbar-brand {
-            font-weight: 600;
-            color: #fff !important;
-        }
-
-        .nav-link {
-            color: #eaeaea !important;
-            font-weight: 500;
-            margin-right: 15px;
-        }
-
-        .nav-link:hover {
-            color: #fff !important;
-            text-decoration: underline;
-        }
-
-        .logout-btn {
-            background: #ff4d4d;
-            color: #fff;
-            border: none;
-            padding: 7px 15px;
-            border-radius: 6px;
-            font-weight: 500;
-        }
-
-        .logout-btn:hover {
-            background: #e63e3e;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin-top: 50px;
-        }
-
-        h2 {
-            color: #00bfff;
-            font-weight: 600;
-            text-align: center;
-        }
-
-        .card {
-            background: rgba(255,255,255,0.08);
-            border: none;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 0 12px rgba(0,0,0,0.2);
-            transition: transform 0.3s ease;
-            text-align: center;
-        }
-
-        .card:hover {
-            transform: translateY(-6px);
-            background: rgba(255,255,255,0.12);
-        }
-
-        .card h4 {
-            color: #00bfff;
+        .profile-pic {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            object-fit: cover;
             margin-bottom: 10px;
         }
 
-        .card p {
-            color: #ccc;
+        .seller-name {
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 15px;
         }
 
-        .btn-primary {
-            background: #00bfff;
+        .sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            width: 90%;
+            border-radius: 8px;
+            margin: 5px 0;
+            text-align: left;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover, .sidebar a.active {
+            background-color: #0b5ed7;
+        }
+
+        .logout-btn {
+            margin-top: auto;
+            background: #dc3545;
+            color: white;
             border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            width: 90%;
+            margin-bottom: 30px;
+            transition: 0.3s;
         }
 
-        .btn-primary:hover {
-            background: #0099cc;
+        .logout-btn:hover {
+            background: #c82333;
+        }
+
+        .content {
+            margin-left: 260px;
+            padding: 40px;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+
+        .card h4 {
+            color: #0d6efd;
+            font-weight: 600;
         }
     </style>
 </head>
 
 <body>
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">NextAuction</a>
-            <div class="d-flex align-items-center ms-auto">
-                <span class="me-3">Welcome, <strong><%= sellerName %></strong></span>
-                <form action="logout.jsp" method="post" class="m-0">
-                    <button type="submit" class="logout-btn">Logout</button>
-                </form>
-            </div>
-        </div>
-    </nav>
 
-    <!-- MAIN CONTENT -->
-    <div class="container text-center">
-        <h2>Seller Dashboard</h2>
-        <p class="mt-3">Manage your auction items, track live bids, and view winners.</p>
+    <!-- 🔹 SIDEBAR -->
+    <div class="sidebar">
+        <img src="<%= profileImage %>" class="profile-pic" alt="Profile Image">
+        <p class="seller-name">👋 <%= sellerName %></p>
+        <hr style="width:80%; opacity:0.3;">
 
-        <div class="row mt-5 g-4">
+        <a href="SellerProfile.jsp">👤 My Profile</a>
+        <a href="additem.jsp">🛒 Add Item</a>
+        <a href="liveauctions.jsp">🔥 Live Auctions</a>
+        <a href="winners.jsp">🏆 Winners</a>
+
+        <form action="logout.jsp" method="post" class="w-100 d-flex justify-content-center">
+            <button type="submit" class="logout-btn">🚪 Logout</button>
+        </form>
+    </div>
+
+    <!-- 🔹 MAIN CONTENT -->
+    <div class="content">
+        <h2 class="text-primary mb-3">Seller Dashboard</h2>
+        <p class="text-muted mb-4">Manage your auctions, monitor live bids, and view winners easily.</p>
+
+        <div class="row g-4">
             <div class="col-md-4">
                 <div class="card">
                     <h4>🛒 Add Item</h4>
-                    <p>Upload your products for auction.</p>
-                    <a href="additem.jsp" class="btn btn-primary">Add New</a>
+                    <p>Upload and manage items for auction.</p>
+                    <a href="additem.jsp" class="btn btn-primary w-100">Add Item</a>
                 </div>
             </div>
 
             <div class="col-md-4">
                 <div class="card">
                     <h4>🔥 Live Auctions</h4>
-                    <p>See all your active auctions in real time.</p>
-                    <a href="liveauctions.jsp" class="btn btn-primary">View Live</a>
+                    <p>View and track your active auctions.</p>
+                    <a href="liveauctions.jsp" class="btn btn-primary w-100">View Live Auctions</a>
                 </div>
             </div>
 
             <div class="col-md-4">
                 <div class="card">
                     <h4>🏆 Winners</h4>
-                    <p>Check the auction results and winners.</p>
-                    <a href="winners.jsp" class="btn btn-primary">View Winners</a>
+                    <p>Check your completed auction results.</p>
+                    <a href="winners.jsp" class="btn btn-primary w-100">View Winners</a>
                 </div>
             </div>
         </div>
     </div>
+
 </body>
 </html>
