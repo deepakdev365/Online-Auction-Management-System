@@ -5,7 +5,10 @@
         response.sendRedirect("bidderlogin.jsp");
         return;
     }
+
     String bidderName = (String) sessionObj.getAttribute("bidderName");
+    String bidderEmail = (String) sessionObj.getAttribute("bidderEmail");
+    String bidderMobile = (String) sessionObj.getAttribute("bidderMobile");
 %>
 
 <!DOCTYPE html>
@@ -14,150 +17,217 @@
     <meta charset="UTF-8">
     <title>Bidder Dashboard | NextAuction</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <style>
         body {
             margin: 0;
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
-            color: #fff;
+            background: #ffffff;
+            color: #333;
+            display: flex;
         }
 
-        nav {
-            background: rgba(0, 0, 0, 0.5);
-            padding: 15px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        /* Sidebar */
+        .sidebar {
+            width: 230px;
+            background: #f7f9fc;
+            height: 100vh;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            position: fixed;
+            left: 0;
+            top: 0;
         }
 
         .logo {
             font-size: 22px;
             font-weight: bold;
-            color: #00bfff;
+            color: #007bff;
+            text-align: center;
+            margin-bottom: 40px;
         }
 
-        .nav-links a {
-            color: #f5f5f5;
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-links a, .nav-links button {
+            color: #333;
             text-decoration: none;
-            margin: 0 12px;
+            margin: 10px 0;
             font-weight: 500;
+            padding: 10px 15px;
+            border-radius: 6px;
+            transition: 0.3s;
+            text-align: left;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
         }
 
-        .nav-links a:hover {
-            color: #00bfff;
+        .nav-links a:hover, .nav-links button:hover {
+            background: #007bff;
+            color: #fff;
         }
 
         .logout-btn {
             background: #ff4d4d;
-            color: white;
+            color: #fff;
             border: none;
-            padding: 8px 14px;
+            padding: 10px 15px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 500;
+            margin-top: 20px;
         }
 
         .logout-btn:hover {
             background: #e63e3e;
         }
 
-        .container {
-            max-width: 1000px;
-            margin: 50px auto;
-            padding: 0 20px;
-            text-align: center;
+        /* Main content */
+        .main-content {
+            margin-left: 250px;
+            padding: 40px;
+            width: calc(100% - 250px);
         }
 
         h2 {
-            color: #00bfff;
+            color: #007bff;
             margin-bottom: 10px;
         }
 
         .cards {
             display: flex;
             flex-wrap: wrap;
-            justify-content: center;
+            justify-content: flex-start;
             gap: 20px;
             margin-top: 40px;
         }
 
         .card {
-            background: rgba(255,255,255,0.1);
+            background: #f9f9f9;
             padding: 25px;
             width: 280px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
             transition: transform 0.3s ease;
         }
 
         .card:hover {
             transform: translateY(-6px);
-            background: rgba(255,255,255,0.15);
         }
 
         .card h3 {
-            color: #00bfff;
-            margin-bottom: 10px;
-        }
-
-        .card p {
-            color: #ddd;
-            font-size: 14px;
+            color: #007bff;
             margin-bottom: 10px;
         }
 
         .card a {
-            color: #00bfff;
+            color: #007bff;
             text-decoration: none;
             font-weight: 500;
+            cursor: pointer;
         }
 
         .card a:hover {
             text-decoration: underline;
         }
+
+        /* Profile section */
+        .profile-section {
+            display: none;
+            background: #f7f9fc;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 400px;
+        }
+
+        .profile-section.active {
+            display: block;
+        }
+
+        .info {
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
     </style>
+
+    <script>
+        function showSection(section) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
+
+            // Show selected
+            document.getElementById(section).style.display = 'block';
+        }
+    </script>
 </head>
 
 <body>
 
-    <nav>
+    <!-- Sidebar -->
+    <div class="sidebar">
         <div class="logo">NextAuction</div>
         <div class="nav-links">
-            <a href="#">Home</a>
-            <a href="#">Live Auctions</a>
-            <a href="#">My Bids</a>
-            <a href="#">Profile</a>
+            <a href="#" onclick="showSection('homeSection')">🏠 Home</a>
+            <a href="#" onclick="showSection('liveSection')">🔥 Live Auctions</a>
+            <a href="#" onclick="showSection('bidsSection')">💰 My Bids</a>
+            <a href="#" onclick="showSection('profileSection')">👤 Profile</a>
+
+            <form action="logout.jsp" method="post">
+                <button type="submit" class="logout-btn">🚪 Logout</button>
+            </form>
         </div>
-        <form action="logout.jsp" method="post" style="margin:0;">
-            <button class="logout-btn">Logout</button>
-        </form>
-    </nav>
+    </div>
 
-    <div class="container">
-        <h2>Welcome, <%= bidderName %> 👋</h2>
-        <p>Get ready to explore and win your favorite auctions!</p>
+    <!-- Main Content -->
+    <div class="main-content">
 
-        <div class="cards">
-            <div class="card">
-                <h3>🔥 Live Auctions</h3>
-                <p>Join ongoing auctions and start bidding now.</p>
-                <a href="#">Explore →</a>
-            </div>
+        <!-- Home Section -->
+        <div id="homeSection" class="section" style="display:block;">
+            <h2>Welcome, <%= bidderName %> 👋</h2>
+            <p>Get ready to explore and win your favorite auctions!</p>
 
-            <div class="card">
-                <h3>💰 My Bids</h3>
-                <p>Track your bids and check your current standings.</p>
-                <a href="#">View Bids →</a>
-            </div>
+            <div class="cards">
+                <div class="card">
+                    <h3>🔥 Live Auctions</h3>
+                    <p>Join ongoing auctions and start bidding now.</p>
+                    <a href="#">Explore →</a>
+                </div>
 
-            <div class="card">
-                <h3>👤 Profile</h3>
-                <p>Update your information and manage your account.</p>
-                <a href="#">Edit Profile →</a>
+                <div class="card">
+                    <h3>💰 My Bids</h3>
+                    <p>Track your bids and check your current standings.</p>
+                    <a href="#">View Bids →</a>
+                </div>
             </div>
         </div>
+
+        <!-- Live Auctions Section -->
+        <div id="liveSection" class="section" style="display:none;">
+            <h2>🔥 Live Auctions</h2>
+            <p>Coming soon... show your live auction list here.</p>
+        </div>
+
+        <!-- My Bids Section -->
+        <div id="bidsSection" class="section" style="display:none;">
+            <h2>💰 My Bids</h2>
+            <p>View and track all your bids here.</p>
+        </div>
+
+        <!-- Profile Section -->
+        <div id="profileSection" class="section profile-section" style="display:none;">
+            <h2>👤 My Profile</h2>
+            <div class="info"><strong>Name:</strong> <%= bidderName %></div>
+            <div class="info"><strong>Email:</strong> <%= bidderEmail != null ? bidderEmail : "Not Available" %></div>
+            <div class="info"><strong>Mobile:</strong> <%= bidderMobile != null ? bidderMobile : "Not Available" %></div>
+            <div class="info"><strong>Account Type:</strong> Bidder</div>
+        </div>
+
     </div>
 
 </body>

@@ -11,7 +11,7 @@ public class Bidder {
     private String address;
     private Timestamp createdAt;
 
-    // Getters and Setters
+    // ✅ Getters and Setters
     public int getBidderId() { return bidderId; }
     public void setBidderId(int bidderId) { this.bidderId = bidderId; }
 
@@ -32,4 +32,9 @@ public class Bidder {
 
     public Timestamp getCreatedAt() { return createdAt; }
     public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
+
+    // ✅ Alias method so servlet can use bidder.getMobile()
+    public String getMobile() {
+        return phone;
+    }
 }

@@ -7,7 +7,7 @@ public class AddItemDao {
 
     private static final String DB_URL = "jdbc:mysql://localhost:3306/online_auction";
     private static final String DB_USER = "root";
-    private static final String DB_PASS = "RJP279";
+    private static final String DB_PASS = "jyoti@2025";
 
     // Add new auction item, returns generated id or -1 on failure
     public int addItem(AuctionItem item) {
