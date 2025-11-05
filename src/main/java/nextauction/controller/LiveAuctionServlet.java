@@ -9,7 +9,7 @@ import nextauction.dao.LiveAuctionDao;
 import nextauction.model.AuctionItem;
 
 @WebServlet("/liveAuctions")
-public class LiveAuctionsServlet extends HttpServlet {
+public class LiveAuctionServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
