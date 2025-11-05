@@ -6,59 +6,71 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import org.json.JSONObject;
+import nextauction.util.DBUtil;
 
-@WebServlet("/placeBid")  
+@WebServlet("/placeBid")
 public class PlaceBidServlet extends HttpServlet {
-
-    private static final long serialVersionUID = 1L;
-
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/online_auction";
-    private static final String DB_USER = "root";
-    private static final String DB_PASS = "RJP279";
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         response.setContentType("application/json");
         JSONObject json = new JSONObject();
 
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("user_id") == null) {
+        if (session == null) {
             json.put("error", "Please log in to place a bid.");
             response.getWriter().print(json.toString());
             return;
         }
 
-        int bidderId = (int) session.getAttribute("user_id");
+        if (session.getAttribute("admin") != null) {
+            json.put("error", "Admin cannot place bids. Please use a bidder account.");
+            response.getWriter().print(json.toString());
+            return;
+        }
+
+        if (session.getAttribute("bidder") == null) {
+            json.put("error", "Please login as bidder to place a bid.");
+            response.getWriter().print(json.toString());
+            return;
+        }
+
+        int bidderId = (int) session.getAttribute("bidderId");
         int itemId = Integer.parseInt(request.getParameter("item_id"));
         double bidAmount = Double.parseDouble(request.getParameter("bid_amount"));
 
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-
-            // Get current bid
-            String query = "SELECT current_bid, end_time FROM auction_items WHERE id=?";
+        try (Connection con = DBUtil.getConnection()) {
+            String query = "SELECT start_price, current_bid, end_time FROM auction_items WHERE item_id=?";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setInt(1, itemId);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
+                double startPrice = rs.getDouble("start_price");
                 double currentBid = rs.getDouble("current_bid");
                 Timestamp endTime = rs.getTimestamp("end_time");
+                double minBid = (currentBid > 0) ? currentBid + 1 : startPrice + 1;
 
-                if (bidAmount <= currentBid) {
-                    json.put("error", "Bid must be higher than current bid.");
+                if (bidAmount < minBid) {
+                    json.put("error", "Bid must be higher than current bid. Minimum bid: ₹" + minBid);
                 } else if (endTime.before(new Timestamp(System.currentTimeMillis()))) {
                     json.put("error", "Auction already ended.");
                 } else {
-                    // Update bid
-                    String update = "UPDATE auction_items SET current_bid=?, highest_bidder_id=? WHERE id=?";
-                    PreparedStatement ps2 = con.prepareStatement(update);
+                    String updateItem = "UPDATE auction_items SET current_bid=?, highest_bidder_id=? WHERE item_id=?";
+                    PreparedStatement ps2 = con.prepareStatement(updateItem);
                     ps2.setDouble(1, bidAmount);
                     ps2.setInt(2, bidderId);
                     ps2.setInt(3, itemId);
                     ps2.executeUpdate();
                     ps2.close();
+
+                    String insertBid = "INSERT INTO bids (item_id, bidder_id, bid_amount) VALUES (?, ?, ?)";
+                    PreparedStatement ps3 = con.prepareStatement(insertBid);
+                    ps3.setInt(1, itemId);
+                    ps3.setInt(2, bidderId);
+                    ps3.setDouble(3, bidAmount);
+                    ps3.executeUpdate();
+                    ps3.close();
 
                     json.put("success", true);
                 }
@@ -68,7 +80,6 @@ public class PlaceBidServlet extends HttpServlet {
 
             rs.close();
             ps.close();
-            con.close();
         } catch (Exception e) {
             e.printStackTrace();
             json.put("error", "Database error occurred.");

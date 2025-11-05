@@ -5,9 +5,9 @@ import java.sql.*;
 public class LoginDao {
 
     // ✅ Database connection details
-    private static final String DB_URL  = "jdbc:mysql://localhost:3306/online_auction";
+    private static final String DB_URL  = "jdbc:mysql://localhost:3306/auction";
     private static final String DB_USER = "root";
-    private static final String DB_PASS = "RJP279";
+    private static final String DB_PASS = "Buster365@";
 
     /**
      * Validate user credentials against the database.
