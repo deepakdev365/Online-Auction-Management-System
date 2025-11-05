@@ -1,15 +1,17 @@
 package nextauction.controller;
 
-import java.io.IOException;
-import java.sql.*;
-import javax.servlet.ServletException;
+import java.io.*;
+import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
+import java.sql.*;
 import org.json.JSONObject;
 import nextauction.util.DBUtil;
 
 @WebServlet("/placeBid")
 public class PlaceBidServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -23,12 +25,14 @@ public class PlaceBidServlet extends HttpServlet {
             return;
         }
 
+        // Check if user is admin
         if (session.getAttribute("admin") != null) {
             json.put("error", "Admin cannot place bids. Please use a bidder account.");
             response.getWriter().print(json.toString());
             return;
         }
 
+        // Check if user is bidder
         if (session.getAttribute("bidder") == null) {
             json.put("error", "Please login as bidder to place a bid.");
             response.getWriter().print(json.toString());
@@ -56,6 +60,7 @@ public class PlaceBidServlet extends HttpServlet {
                 } else if (endTime.before(new Timestamp(System.currentTimeMillis()))) {
                     json.put("error", "Auction already ended.");
                 } else {
+                    // Update auction_items table
                     String updateItem = "UPDATE auction_items SET current_bid=?, highest_bidder_id=? WHERE item_id=?";
                     PreparedStatement ps2 = con.prepareStatement(updateItem);
                     ps2.setDouble(1, bidAmount);
@@ -64,6 +69,7 @@ public class PlaceBidServlet extends HttpServlet {
                     ps2.executeUpdate();
                     ps2.close();
 
+                    // Record bid in bids table
                     String insertBid = "INSERT INTO bids (item_id, bidder_id, bid_amount) VALUES (?, ?, ?)";
                     PreparedStatement ps3 = con.prepareStatement(insertBid);
                     ps3.setInt(1, itemId);
@@ -73,6 +79,7 @@ public class PlaceBidServlet extends HttpServlet {
                     ps3.close();
 
                     json.put("success", true);
+                    json.put("message", "Bid placed successfully!");
                 }
             } else {
                 json.put("error", "Item not found.");
@@ -82,9 +89,11 @@ public class PlaceBidServlet extends HttpServlet {
             ps.close();
         } catch (Exception e) {
             e.printStackTrace();
-            json.put("error", "Database error occurred.");
+            json.put("error", "Database error occurred: " + e.getMessage());
         }
 
-        response.getWriter().print(json.toString());
+        PrintWriter out = response.getWriter();
+        out.print(json.toString());
+        out.flush();
     }
 }

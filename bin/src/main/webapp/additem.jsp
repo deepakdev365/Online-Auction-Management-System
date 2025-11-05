@@ -2,102 +2,182 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Add Auction Item | NextAuction</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<meta charset="UTF-8">
+<title>Add Auction Item | NextAuction</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <style>
-        body {
-            background: linear-gradient(135deg, #0d1117, #161b22);
-            color: #fff;
-            font-family: 'Poppins', sans-serif;
-        }
+<style>
+    body {
+        background: linear-gradient(135deg, #00172D, #004C99);
+        color: #fff;
+        font-family: 'Poppins', sans-serif;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 10px;
+    }
 
-        .container {
-            max-width: 600px;
-            margin-top: 70px;
-            background: rgba(255,255,255,0.08);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 0 12px rgba(0,0,0,0.3);
-        }
+    .form-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 35px 40px;
+        width: 100%;
+        max-width: 600px;
+        box-shadow: 0 0 20px rgba(0, 150, 255, 0.3);
+    }
 
-        h2 {
-            text-align: center;
-            color: #00bfff;
-            font-weight: 600;
-            margin-bottom: 25px;
-        }
+    h2 {
+        text-align: center;
+        color: #00bfff;
+        margin-bottom: 25px;
+        font-weight: 600;
+    }
 
-        label {
-            color: #ddd;
-        }
+    label {
+        color: #e0e0e0;
+        font-weight: 500;
+    }
 
-        .btn-submit {
-            background-color: #00bfff;
-            color: #fff;
-            border: none;
-            width: 100%;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 500;
-        }
+    input, select, textarea {
+        background: rgba(255,255,255,0.15);
+        border: none;
+        color: #fff;
+        border-radius: 6px;
+    }
 
-        .btn-submit:hover {
-            background-color: #0099cc;
-        }
+    input:focus, select:focus, textarea:focus {
+        outline: none;
+        box-shadow: 0 0 5px #00bfff;
+        border: 1px solid #00bfff;
+    }
 
-        a.back {
-            display: block;
-            text-align: center;
-            margin-top: 15px;
-            color: #00bfff;
-            text-decoration: none;
-        }
+    .btn-submit {
+        background: linear-gradient(135deg, #00bfff, #0088cc);
+        color: #fff;
+        border: none;
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: 0.3s;
+    }
 
-        a.back:hover {
-            text-decoration: underline;
-        }
-    </style>
+    .btn-submit:hover {
+        background: linear-gradient(135deg, #00ccff, #0077b6);
+    }
+
+    .btn-back {
+        display: inline-block;
+        background: transparent;
+        border: 1px solid #00bfff;
+        color: #00bfff;
+        padding: 6px 14px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 14px;
+        transition: 0.3s;
+    }
+
+    .btn-back:hover {
+        background: #00bfff;
+        color: #fff;
+    }
+
+    #responseMsg {
+        margin-top: 15px;
+        text-align: center;
+        font-weight: 500;
+    }
+</style>
 </head>
 
 <body>
 
-<div class="container">
-    <h2>Add New Auction Item</h2>
+<div class="form-card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <a href="SellerDashboard.jsp" class="btn-back">← Back to Dashboard</a>
+    </div>
 
-    <form action="AddItemServlet" method="post" enctype="multipart/form-data">
+    <h2>🛒 Add Auction Item</h2>
+
+    <form id="addItemForm" action="addItem" method="post" enctype="multipart/form-data">
         <div class="mb-3">
             <label>Item Title</label>
-            <input type="text" name="title" class="form-control" placeholder="Enter item title" required>
-        </div>
-
-        <div class="mb-3">
-            <label>Starting Price (₹)</label>
-            <input type="number" name="start_price" class="form-control" placeholder="Enter starting price" required>
+            <input type="text" class="form-control" name="title" required>
         </div>
 
         <div class="mb-3">
             <label>Description</label>
-            <textarea name="description" class="form-control" rows="3" placeholder="Enter item description" required></textarea>
+            <textarea class="form-control" name="description" rows="3" required></textarea>
         </div>
 
         <div class="mb-3">
-            <label>End Time</label>
-            <input type="datetime-local" name="end_time" class="form-control" required>
+            <label>Category</label>
+            <select class="form-select" name="category" required>
+                <option value="">-- Select Category --</option>
+                <option>Electronics</option>
+                <option>Vehicles</option>
+                <option>Home & Garden</option>
+                <option>Collectibles</option>
+                <option>Art</option>
+                <option>Fashion</option>
+                <option>Jewelry</option>
+                <option>Sports</option>
+                <option>Other</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label>Starting Price (₹)</label>
+            <input type="number" class="form-control" name="start_price" step="0.01" required>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Start Time</label>
+                <input type="datetime-local" class="form-control" name="start_time" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>End Time</label>
+                <input type="datetime-local" class="form-control" name="end_time" required>
+            </div>
         </div>
 
         <div class="mb-3">
             <label>Upload Image</label>
-            <input type="file" name="image" class="form-control" accept="image/*" required>
+            <input type="file" class="form-control" name="image" accept="image/*">
         </div>
 
         <button type="submit" class="btn-submit">Add Item</button>
     </form>
 
-    <a href="SellerDashboard.jsp" class="back">⬅ Back to Dashboard</a>
+    <div id="responseMsg"></div>
 </div>
+
+<script>
+document.getElementById("addItemForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const msg = document.getElementById("responseMsg");
+    msg.innerHTML = "<p style='color:#00bfff;'>⏳ Adding item...</p>";
+
+    try {
+        const res = await fetch("addItem", { method: "POST", body: formData });
+        const data = await res.json();
+        if (data.success) {
+            msg.innerHTML = `<p style='color:lightgreen;'>✅ Item added successfully! (ID: ${data.id})</p>`;
+            this.reset();
+        } else {
+            msg.innerHTML = `<p style='color:#ff6b6b;'>❌ ${data.error || "Something went wrong!"}</p>`;
+        }
+    } catch (err) {
+        msg.innerHTML = `<p style='color:#ff6b6b;'>⚠️ ${err.message}</p>`;
+    }
+});
+</script>
 
 </body>
 </html>

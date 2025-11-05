@@ -24,13 +24,16 @@ public class SellerLoginServlet extends HttpServlet {
         if (seller != null) {
             HttpSession session = request.getSession();
             session.setAttribute("seller", seller);
+            session.setAttribute("seller_id", seller.getSellerId());
             session.setAttribute("sellerName", seller.getFullName());
 
-            // ✅ Always include context path
-            response.sendRedirect(request.getContextPath() + "/SellerDashboard.jsp");
+            // ✅ ADD THIS LINE — ensures image persists after relogin
+            session.setAttribute("profileImage", seller.getProfileImage());
+
+            response.sendRedirect("SellerDashboard.jsp");
         } else {
             request.setAttribute("error", "Invalid email or password!");
-            RequestDispatcher rd = request.getRequestDispatcher("sellerlogin.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("SellerLogin.jsp");
             rd.forward(request, response);
         }
     }
