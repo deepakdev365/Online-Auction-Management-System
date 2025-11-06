@@ -1,14 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="nextauction.model.Bidder" %>
 <%
+    // ✅ Session validation
     HttpSession sessionObj = request.getSession(false);
-    if (sessionObj == null || sessionObj.getAttribute("bidderName") == null) {
+    if (sessionObj == null || sessionObj.getAttribute("bidder") == null) {
         response.sendRedirect("bidderlogin.jsp");
         return;
     }
 
-    String bidderName = (String) sessionObj.getAttribute("bidderName");
-    String bidderEmail = (String) sessionObj.getAttribute("bidderEmail");
-    String bidderMobile = (String) sessionObj.getAttribute("bidderMobile");
+    Bidder bidder = (Bidder) sessionObj.getAttribute("bidder");
 %>
 
 <!DOCTYPE html>
@@ -136,68 +136,80 @@
         }
 
         /* Profile section */
-        .profile-section {
-            display: none;
-            background: #f7f9fc;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            width: 400px;
-        }
-
-        .profile-section.active {
-            display: block;
-        }
-
-        .info {
-            font-size: 16px;
-            margin-bottom: 12px;
-        }
-
-        /* 🔍 Search bar styling */
-        .search-bar {
-            width: 100%;
+        .profile-wrapper {
+            background: #fff;
             max-width: 500px;
-            display: flex;
-            align-items: center;
-            background: #f1f3f6;
-            padding: 10px 15px;
-            border-radius: 25px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
+            margin: 50px auto;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
         }
 
-        .search-bar input {
-            flex: 1;
-            border: none;
-            outline: none;
-            background: none;
-            font-size: 16px;
-            color: #333;
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #007bff;
         }
 
-        .search-bar button {
+        .edit-btn {
+            position: relative;
+            top: -35px;
+            left: 40px;
             background: #007bff;
             color: white;
-            border: none;
-            border-radius: 20px;
-            padding: 8px 16px;
+            border-radius: 50%;
+            padding: 5px 8px;
             cursor: pointer;
-            font-weight: 500;
+            font-size: 14px;
         }
 
-        .search-bar button:hover {
+        .profile-form input, .profile-form select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .save-btn {
+            background: #007bff;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            margin-top: 20px;
+            width: 100%;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .save-btn:hover {
             background: #0056b3;
         }
 
+        .profile-form label {
+            display: block;
+            text-align: left;
+            font-weight: 600;
+            margin-top: 10px;
+        }
     </style>
 
     <script>
         function showSection(section) {
-            // Hide all sections
             document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
-            // Show selected
             document.getElementById(section).style.display = 'block';
+        }
+
+        function previewImage(event) {
+            const img = document.getElementById('profilePreview');
+            img.src = URL.createObjectURL(event.target.files[0]);
         }
     </script>
 </head>
@@ -221,16 +233,17 @@
 
     <!-- Main Content -->
     <div class="main-content">
-
-        <!-- 🔍 Search Bar -->
+    
+            <!-- 🔍 Search Bar -->
         <form class="search-bar" action="SearchAuctionServlet" method="get">
             <input type="text" name="query" placeholder="Search auction items..." required>
             <button type="submit">Search</button>
         </form>
+    
 
         <!-- Home Section -->
         <div id="homeSection" class="section" style="display:block;">
-            <h2>Welcome, <%= bidderName %> 👋</h2>
+            <h2>Welcome, <%= bidder.getFullName() %> 👋</h2>
             <p>Get ready to explore and win your favorite auctions!</p>
 
             <div class="cards">
@@ -261,18 +274,48 @@
         </div>
 
         <!-- Profile Section -->
-        <div id="profileSection" class="section profile-section" style="display:none;">
-            <h2>👤 My Profile</h2>
-            <div class="info"><strong>Name:</strong> <%= bidderName %></div>
-            <div class="info"><strong>Email:</strong> <%= bidderEmail != null ? bidderEmail : "Not Available" %></div>
-            <div class="info"><strong>Mobile:</strong> <%= bidderMobile != null ? bidderMobile : "Not Available" %></div>
-            <div class="info"><strong>Account Type:</strong> Bidder</div>
-        </div>
+        <div id="profileSection" class="section" style="display:none;">
+            <div class="profile-wrapper">
+                <form action="ProfileUploadServlet" method="post" enctype="multipart/form-data" class="profile-form">
+                    <div style="position: relative; display: inline-block;">
+                        <img id="profilePreview"
+                            class="profile-img"
+                            src="<%= bidder.getDisplayProfileImage() %>"
+                            alt="Profile Picture">
+                        <label for="profileImage" class="edit-btn">✎</label>
+                        <input type="file" name="profileImage" id="profileImage" accept="image/*" style="display:none;" onchange="previewImage(event)">
+                    </div>
 
+                    <h2 style="color:#007bff;">Edit Profile</h2>
+
+                    <label>Full Name</label>
+                    <input type="text" name="firstName" value="<%= bidder.getFullName() %>" placeholder="Full Name">
+
+                    <label>Email</label>
+                    <input type="email" name="email" value="<%= bidder.getEmail() %>" required>
+
+                    <label>Phone</label>
+                    <input type="tel" name="phone" value="<%= bidder.getPhone() %>" required>
+
+                    <label>Birth Date</label>
+                    <input type="date" name="birthDate" value="<%= bidder.getBirthDate() != null ? bidder.getBirthDate().toString() : "" %>">
+
+                    <label>Gender</label>
+                    <select name="gender">
+                        <option value="">Select Gender</option>
+                        <option value="Male" <%= "Male".equalsIgnoreCase(bidder.getGender()) ? "selected" : "" %>>Male</option>
+                        <option value="Female" <%= "Female".equalsIgnoreCase(bidder.getGender()) ? "selected" : "" %>>Female</option>
+                        <option value="Other" <%= "Other".equalsIgnoreCase(bidder.getGender()) ? "selected" : "" %>>Other</option>
+                    </select>
+
+                    <label>Address</label>
+                    <input type="text" name="address" value="<%= bidder.getAddress() != null ? bidder.getAddress() : "" %>" placeholder="Your Address">
+
+                    <button type="submit" class="save-btn">💾 Save Changes</button>
+                </form>
+            </div>
+        </div>
     </div>
 
 </body>
 </html>
-
-
-

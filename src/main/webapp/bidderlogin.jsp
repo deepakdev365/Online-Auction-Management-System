@@ -89,13 +89,15 @@
 
 <div class="login-container">
     <h2>Bidder Login</h2>
-    <form action="BidderLoginServlet" method="post">
-    <input type="email" name="email" placeholder="Email" required>
-    <input type="password" name="password" placeholder="Password" required>
-    <button type="submit">Login</button>
-</form>
 
+    <!-- ✅ Corrected: Form points to servlet via context path -->
+    <form action="<%= request.getContextPath() %>/BidderLoginServlet" method="post">
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+    </form>
 
+    <!-- ✅ Error Message Display -->
     <% if (request.getAttribute("error") != null) { %>
         <p class="error-msg"><%= request.getAttribute("error") %></p>
     <% } %>

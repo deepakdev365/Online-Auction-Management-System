@@ -1,29 +1,69 @@
-public List<Auction> searchAuctions(String query) {
-    List<Auction> auctions = new ArrayList<>();
-    String sql = "SELECT * FROM auctions WHERE item_name LIKE ? OR category LIKE ? OR description LIKE ?";
+package nextauction.dao;
 
-    try (Connection conn = DBUtil.getConnection();
-         PreparedStatement ps = conn.prepareStatement(sql)) {
+public class AuctionDao {
+    private int id;
+    private String itemName;
+    private String category;
+    private String description;
+    private double startingPrice;
+    private double currentBid;
+    private String status;
 
-        String pattern = "%" + query + "%";
-        ps.setString(1, pattern);
-        ps.setString(2, pattern);
-        ps.setString(3, pattern);
+    // --- Getters and Setters ---
 
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            Auction a = new Auction();
-            a.setId(rs.getInt("id"));
-            a.setItemName(rs.getString("item_name"));
-            a.setCategory(rs.getString("category"));
-            a.setDescription(rs.getString("description"));
-            a.setStartingPrice(rs.getDouble("starting_price"));
-            a.setCurrentBid(rs.getDouble("current_bid"));
-            auctions.add(a);
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
+    public int getId() {
+        return id;
     }
 
-    return auctions;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public double getStartingPrice() {
+        return startingPrice;
+    }
+
+    public void setStartingPrice(double startingPrice) {
+        this.startingPrice = startingPrice;
+    }
+
+    public double getCurrentBid() {
+        return currentBid;
+    }
+
+    public void setCurrentBid(double currentBid) {
+        this.currentBid = currentBid;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

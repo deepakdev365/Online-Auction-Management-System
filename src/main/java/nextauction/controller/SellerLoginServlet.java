@@ -33,7 +33,7 @@ public class SellerLoginServlet extends HttpServlet {
             response.sendRedirect("SellerDashboard.jsp");
         } else {
             request.setAttribute("error", "Invalid email or password!");
-            RequestDispatcher rd = request.getRequestDispatcher("SellerLogin.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("sellerlogin.jsp");
             rd.forward(request, response);
         }
     }
